@@ -102,15 +102,23 @@ static void client() {
 //
 
 int main(int argc, char **argv) {
-    if (fork() == 0) {
-        sleep(1);
-        client();
-    }
-    else {
-        server();
-        printf("Press enter to exit...\n");
-        getchar();
-    }
+	printf("[S] Starting server on port %d\n", SERVER_PORT);
+	Server server;
+	if (!server.start(SERVER_PORT, 1)) {
+		printf("[S] Unable to start server\n");
+		return 1;
+	}
+
+
+	printf("[S] Connecting to server on port %d\n", SERVER_PORT);
+	Client client;
+	if (!client.connect("localhost", SERVER_PORT)) {
+		printf("[C] Unable to connect to server\n");
+		return 1;
+	}
+
+
+
 
     return 0;
 }
