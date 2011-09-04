@@ -30,98 +30,11 @@ using namespace metacall;
 
 
 //
-// Constants
-//
-
-static const int SERVER_PORT        = 1337;
-static const int SERVER_MAX_CLIENTS = 1;
-
-
-//
-// Serial unit tests
-//
-
-static const char   serialTestData[]    = "SerializationTests";
-static const int    serialTestDataSize  = sizeof(serialTestData);
-
-struct ComplexLocalSerial {
-    bool serialize(Serializer* serializer) const {
-        printf("ComplexLocalSerial::serialize:\n");
-
-        const bool result = serializer->writeRaw(serialTestData, serialTestDataSize);
-        if (result) {
-            printf("\t[SUCCESS] Wrote data\n");
-        }
-        else {
-            printf("\t[ERROR] Error writing data\n");
-        }
-
-        return result;
-    }
-
-    bool deserialize(Deserializer* deserializer) {
-        printf("ComplexLocalSerial::deserialize:\n");
-
-        const char * data = deserializer->readRaw(serialTestDataSize);
-        if (data == NULL) {
-            printf("\t*** Error reading data\n");
-        }
-        else if (memcmp(data, serialTestData, serialTestDataSize) != 0) {
-            printf("\t*** Error reading correct data\n");
-        }
-        else {
-            printf("\tRead data\n");
-        }
-
-        const bool success = deserializer->readRaw(buffer);
-    serialTestDataSize
-
-        deserializer->
-    }
-};
-
-static void unitTestSerialization() {
-    Buffer buffer;
-
-
-
-
-
-}
-
-
-
-static void serverTest() {
-    printf("Server test!\n");
-}
-
-
-//
 // Program entry
 //
 
-int main(int argc, char **argv) {
-    Server server;
-    printf("[S] Starting server on port %d\n", SERVER_PORT);
-    if (!server.start(SERVER_PORT, SERVER_MAX_CLIENTS)) {
-        printf("[S] Unable to start server\n");
-        return 1;
-    }
+int main(int argc, char *argv[]) {
 
-    server.binding()->bind(FPARAM(serverTest));
-
-    Client client;
-    printf("[S] Connecting to server on port %d\n", SERVER_PORT);
-    if (!client.connect("localhost", SERVER_PORT)) {
-        printf("[C] Unable to connect to server\n");
-        return 1;
-    }
-
-    while (true) {
-        server.advance();
-        client.protocol()->invoke("serverTest");
-        client.advance();
-    }
 
     return 0;
 }

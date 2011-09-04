@@ -30,16 +30,19 @@
 #include <assert.h>
 
 #ifdef _WIN32
-    #pragma comment(lib, "ws2_32.lib")
-    #define NOMINMAX
-    #include <ws2tcpip.h>
+
+#define NOMINMAX
+#include <ws2tcpip.h>
+
 #else
-    #include <sys/socket.h>
-    #include <netinet/tcp.h>
-    #include <arpa/inet.h>
-    #include <netdb.h>
-    #include <unistd.h>
-    #include <fcntl.h>
+
+#include <sys/socket.h>
+#include <netinet/tcp.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <unistd.h>
+#include <fcntl.h>
+
 #endif
 
 #include "mc_common.hpp"
