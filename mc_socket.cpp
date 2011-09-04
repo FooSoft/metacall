@@ -29,14 +29,34 @@
 namespace metacall {
 
 
+namespace {
+
+
 //
 // Constants
 //
 
-namespace {
-
-
 const int SOCKET_INVALID = -1;
+
+
+//
+// Winsock
+//
+
+#ifdef _WIN32
+
+struct WsaScope {
+    WsaScope() {
+        WSAData data; 
+        WSAStartup(MAKEWORD(2, 2), &data); 
+    }
+
+    ~WsaScope() {
+        WSACleanup();
+    }
+} wsa;
+
+#endif
 
 
 }

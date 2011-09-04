@@ -31,6 +31,7 @@
 
 #ifdef _WIN32
     #pragma comment(lib, "ws2_32.lib")
+    #define NOMINMAX
     #include <ws2tcpip.h>
 #else
     #include <sys/socket.h>

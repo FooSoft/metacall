@@ -87,11 +87,11 @@ void Buffer::setData(const void* data, int bytes) {
 }
 
 const void* Buffer::data() const {
-    return &data_[0];
+    return bytes() == 0 ? NULL : &data_[0];
 }
 
 void* Buffer::data() {
-    return &data_[0];
+    return bytes() == 0 ? NULL : &data_[0];
 }
 
 int Buffer::bytes() const {
