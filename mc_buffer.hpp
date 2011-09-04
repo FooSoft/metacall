@@ -48,6 +48,9 @@ public:
     void*               data            ();
     int                 bytes           () const;
 
+    bool                serialize       (Serializer* serializer) const;
+    bool                deserialize     (Deserializer* deserializer);
+
 private:
     std::vector<byte>   data_;
 };

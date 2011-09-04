@@ -56,6 +56,20 @@ struct PacketHeader {
     {
     }
 
+    bool serialize(Serializer* serializer) const {
+        return
+            serializer->write(magic) &&
+            serializer->write(id) &&
+            serializer->write(size);
+    }
+
+    bool deserialize(Deserializer* deserializer) {
+        return
+            deserializer->read(&magic) &&
+            deserializer->read(&id) &&
+            deserializer->read(&size);
+    }
+
     dword   magic;
     byte    id;
     dword   size;
@@ -76,6 +90,20 @@ struct PacketInvokeRequest {
     enum {
         Id = PACKET_ID_FUNCTION_CALL_REQUEST
     };
+
+    bool serialize(Serializer* serializer) const {
+        return
+            serializer->write(function) &&
+            serializer->write(taskId) &&
+            serializer->write(data);
+    }
+
+    bool deserialize(Deserializer* deserializer) {
+        return
+            deserializer->read(&function) &&
+            deserializer->read(&taskId) &&
+            deserializer->read(&data);
+    }
 
     dword   function;
     dword   taskId;
@@ -102,6 +130,20 @@ struct PacketInvokeReply {
         FLAG_UNBOUND_FUNC = 1 << 0,
         FLAG_INVALID_ARGS = 1 << 1,
     };
+
+    bool serialize(Serializer* serializer) const {
+        return
+            serializer->write(flags) &&
+            serializer->write(taskId) &&
+            serializer->write(data);
+    }
+
+    bool deserialize(Deserializer* deserializer) {
+        return
+            deserializer->read(&flags) &&
+            deserializer->read(&taskId) &&
+            deserializer->read(&data);
+    }
 
     word    flags;
     dword   taskId;

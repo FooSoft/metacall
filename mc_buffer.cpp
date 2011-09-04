@@ -98,5 +98,26 @@ int Buffer::bytes() const {
     return data_.size();
 }
 
+bool Buffer::serialize(Serializer* serializer) const {
+    serializer->write(bytes());
+    serializer->writeRaw(data(), bytes());
+    return true;
+}
+
+bool Buffer::deserialize(Deserializer* deserializer) {
+    int count = 0;
+    if (!deserializer->read(&count)) {
+        return false;
+    }
+
+    const byte* const data = deserializer->readRaw(count);
+    if (data == NULL) {
+        return false;
+    }
+
+    setData(data, count);
+    return true;
+}
+
 
 }

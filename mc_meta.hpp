@@ -32,7 +32,7 @@ namespace metacall {
 // Meta
 //
 
-qword serialize(class Serializer*, ...);
+qword serialize(Serializer*, ...);
 
 template <typename T>
 struct HasGlobalSerializer {
@@ -46,7 +46,7 @@ struct HasGlobalSerializer {
     };
 };
 
-qword deserialize(class Deserializer*, ...);
+qword deserialize(Deserializer*, ...);
 
 template <typename T>
 struct HasGlobalDeserializer {
@@ -62,11 +62,11 @@ struct HasGlobalDeserializer {
 
 template <typename T>
 struct HasLocalSerializer {
-    template <typename U, bool (U::*)(Serializer*)>
+    template <typename U, bool (U::*)(Serializer*) const>
     struct Signature { };
 
     template <typename U>
-    static dword Test(Signature<U, U::serialize>*);
+    static dword Test(Signature<U, &U::serialize>*);
 
     template <typename U>
     static qword Test(...);
@@ -82,7 +82,7 @@ struct HasLocalDeserializer {
     struct Signature { };
 
     template <typename U>
-    static dword Test(Signature<U, U::deserialize>*);
+    static dword Test(Signature<U, &U::deserialize>*);
 
     template <typename U>
     static qword Test(...);

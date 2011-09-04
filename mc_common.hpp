@@ -53,4 +53,12 @@ namespace metacall {
 #endif
 
 
+//
+// Forward declarations
+//
+
+class Serializer;
+class Deserializer;
+
+
 }

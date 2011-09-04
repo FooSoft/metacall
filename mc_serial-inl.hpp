@@ -104,40 +104,4 @@ bool Serializer::write(const T& data) {
 }
 
 
-//
-// Serializers
-//
-
-template <typename T>
-bool serialize(Serializer* serializer, const ArrayWriter<T>& writer) {
-    serializer->write(writer.count);
-
-    for (int i = 0; i < writer.count; ++i) {
-        serializer->write(writer.data[i]);
-    }
-
-    return true;
-}
-
-template <typename T>
-bool deserialize(Deserializer* deserializer, ArrayReader<T>* reader) {
-    reader->clear();
-
-    if (!deserializer->read(&reader->count)) {
-        return false;
-    }
-
-    reader->data = new T[reader->count];
-
-    for (int i = 0; i < reader->count; ++i) {
-        if (!deserializer->read(reader->data + i)) {
-            reader->clear();
-            return false;
-        }
-    }
-
-    return true;
-}
-
-
 }

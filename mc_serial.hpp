@@ -63,74 +63,9 @@ public:
     int         offset      () const;
 
 private:
-    Buffer* data_;
-    int     offset_;
+    Buffer*     data_;
+    int         offset_;
 };
-
-
-//
-// ArrayWriter
-//
-
-template <typename T>
-class ArrayWriter {
-public:
-    ArrayWriter(const T* data, int count) :
-        data(data),
-        count(count)
-    {
-    }
-
-    const T*    data;
-    int         count;
-};
-
-
-//
-// ArrayReader
-//
-
-template <typename T>
-class ArrayReader {
-public:
-    ArrayReader() :
-        data(NULL),
-        count(0)
-    {
-    }
-
-    ~ArrayReader() {
-        delete[] data;
-
-        data    = NULL;
-        count   = 0;
-    }
-
-    const T*    data;
-    int         count;
-};
-
-
-//
-// Standard serializers/deserializers
-//
-
-template    <typename T>
-bool        serialize   (Serializer* serializer, const ArrayWriter<T>& writer);
-template    <typename T>
-bool        deserialize (Deserializer* deserializer, ArrayReader<T>* reader);
-
-bool        serialize   (Serializer* serializer, const Buffer& buffer);
-bool        deserialize (Deserializer* deserializer, Buffer* buffer);
-
-bool        serialize   (Serializer* serializer, const PacketHeader& packet);
-bool        deserialize (Deserializer* deserializer, PacketHeader* packet);
-
-bool        serialize   (Serializer* serializer, const PacketInvokeRequest& packet);
-bool        deserialize (Deserializer* deserializer, PacketInvokeRequest* packet);
-
-bool        serialize   (Serializer* serializer, const PacketInvokeReply& packet);
-bool        deserialize (Deserializer* deserializer, PacketInvokeReply* packet);
 
 
 }
