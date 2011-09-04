@@ -32,8 +32,8 @@ namespace metacall {
 // Macros
 //
 
-#define IS_TRUE(x)  ((x) != 0)
 #define ASSERT      assert
+#define FPARAM(x)   #x, x
 
 
 //

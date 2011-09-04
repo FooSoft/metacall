@@ -34,6 +34,7 @@ namespace metacall {
 
 class IFunctor {
 public:
+    virtual ~IFunctor() { }
     virtual bool call(Deserializer* args, Serializer* ret) const = 0;
 };
 

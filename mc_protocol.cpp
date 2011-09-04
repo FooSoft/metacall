@@ -141,8 +141,8 @@ Stream::State Protocol::advanceInvokeReply() {
         }
         else {
             const bool error =
-                IS_TRUE(packetReply.flags & PacketInvokeReply::FLAG_UNBOUND_FUNC) ||
-                IS_TRUE(packetReply.flags & PacketInvokeReply::FLAG_INVALID_ARGS);
+                (packetReply.flags & PacketInvokeReply::FLAG_UNBOUND_FUNC) ||
+                (packetReply.flags & PacketInvokeReply::FLAG_INVALID_ARGS);
 
             iter->second.state  = error ? TASK_STATE_ERROR : TASK_STATE_READY;
             iter->second.data   = packetReply.data;

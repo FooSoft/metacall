@@ -30,27 +30,42 @@ namespace metacall {
 // TypeReader
 //
 
-template <typename T, bool G>
+template <typename T, bool L, bool G>
 struct TypeReader {
+    static bool read(Deserializer* deserializer, T* data) {
+        return data->deserialize(deserializer);
+    }
+};
+
+template <typename T>
+struct TypeReader<T, false, true> {
     static bool read(Deserializer* deserializer, T* data) {
         return deserialize(deserializer, data);
     }
 };
 
 template <typename T>
-struct TypeReader<T, false> {
+struct TypeReader<T, false, false> {
     static bool read(Deserializer* deserializer, T* data) {
-        const T* const temp = reinterpret_cast<const T*>(deserializer->readRaw(sizeof(T)));
+        const T* const temp = reinterpret_cast<const T*>(
+            deserializer->readRaw(sizeof(T))
+        );
+
         if (temp != NULL) {
             *data = *temp;
         }
+
         return temp != NULL;
     }
 };
 
 template <typename T>
 bool Deserializer::read(T* data) {
-    return TypeReader<T, IsDeserializable<T>::Value>::read(this, data);
+    return TypeReader<
+        T,
+        HasLocalDeserializer<T>::Value,
+        HasGlobalDeserializer<T>::Value
+    >::read(this, data);
 }
 
 
@@ -58,15 +73,22 @@ bool Deserializer::read(T* data) {
 // TypeWriter
 //
 
-template <typename T, bool G>
+template <typename T, bool L, bool G>
 struct TypeWriter {
+    static bool write(Serializer* serializer, const T& data) {
+        return data.serialize(serializer);
+    }
+};
+
+template <typename T>
+struct TypeWriter<T, false, true> {
     static bool write(Serializer* serializer, const T& data) {
         return serialize(serializer, data);
     }
 };
 
 template <typename T>
-struct TypeWriter<T, false> {
+struct TypeWriter<T, false, false> {
     static bool write(Serializer* serializer, const T& data) {
         return serializer->writeRaw(&data, sizeof(T));
     }
@@ -74,7 +96,11 @@ struct TypeWriter<T, false> {
 
 template <typename T>
 bool Serializer::write(const T& data) {
-    return TypeWriter<T, IsSerializable<T>::Value>::write(this, data);
+    return TypeWriter<
+        T,
+        HasLocalSerializer<T>::Value,
+        HasGlobalSerializer<T>::Value
+    >::write(this, data);
 }
 
 

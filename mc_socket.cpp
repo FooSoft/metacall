@@ -225,17 +225,17 @@ bool Socket::wait(unsigned mask, int seconds) const {
 #pragma warning(push)
 #pragma warning(disable:4127)
 #endif
-    if (IS_TRUE(mask & MASK_READ)) {
+    if (mask & MASK_READ) {
         readSetUse = &readSet;
         FD_ZERO(readSetUse);
         FD_SET(socket_, readSetUse);
     }
-    if (IS_TRUE(mask & MASK_WRITE)) {
+    if (mask & MASK_WRITE) {
         writeSetUse = &writeSet;
         FD_ZERO(writeSetUse);
         FD_SET(socket_, writeSetUse);
     }
-    if (IS_TRUE(mask & MASK_EXCEPT)) {
+    if (mask & MASK_EXCEPT) {
         exceptSetUse = &exceptSet;
         FD_ZERO(exceptSetUse);
         FD_SET(socket_, exceptSetUse);

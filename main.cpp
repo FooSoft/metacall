@@ -33,7 +33,7 @@ using namespace metacall;
 // Constants
 //
 
-static const int SERVER_PORT        = 1338;
+static const int SERVER_PORT        = 1337;
 static const int SERVER_MAX_CLIENTS = 1;
 
 
@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    server.binding()->bind("serverTest", serverTest);
+    server.binding()->bind(FPARAM(serverTest));
 
     Client client;
     printf("[S] Connecting to server on port %d\n", SERVER_PORT);

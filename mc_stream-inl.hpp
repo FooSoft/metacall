@@ -25,6 +25,7 @@
 
 namespace metacall {
 
+
 template <typename T>
 Stream::State Stream::send(const T& packet) {
     if (!socket_->connected()) {
@@ -68,5 +69,6 @@ Stream::State Stream::receive(T* packet) {
 
     return success ? STATE_READY : STATE_ERROR_PROTOCOL;
 }
+
 
 }

@@ -32,30 +32,63 @@ namespace metacall {
 // Meta
 //
 
-qword serialize     (class Serializer*, ...);
-qword deserialize   (class Deserializer*, ...);
+qword serialize(class Serializer*, ...);
 
 template <typename T>
-struct IsSerializable {
+struct HasGlobalSerializer {
     enum {
         Value = sizeof(bool) == sizeof(
             serialize(
-                static_cast<Serializer*>(0),
-                *static_cast<T*>(0)
+                static_cast<Serializer*>(NULL),
+                *static_cast<const T*>(NULL)
+            )
+        )
+    };
+};
+
+qword deserialize(class Deserializer*, ...);
+
+template <typename T>
+struct HasGlobalDeserializer {
+    enum {
+        Value = sizeof(bool) == sizeof(
+            deserialize(
+                static_cast<Deserializer*>(NULL),
+                static_cast<T*>(NULL)
             )
         )
     };
 };
 
 template <typename T>
-struct IsDeserializable {
+struct HasLocalSerializer {
+    template <typename U, bool (U::*)(Serializer*)>
+    struct Signature { };
+
+    template <typename U>
+    static dword Test(Signature<U, U::serialize>*);
+
+    template <typename U>
+    static qword Test(...);
+
     enum {
-        Value = sizeof(bool) == sizeof(
-            deserialize(
-                static_cast<Deserializer*>(0),
-                static_cast<T*>(0)
-            )
-        )
+        Value = sizeof(Test<T>(NULL)) == sizeof(dword)
+    };
+};
+
+template <typename T>
+struct HasLocalDeserializer {
+    template <typename U, bool (U::*)(Deserializer*)>
+    struct Signature { };
+
+    template <typename U>
+    static dword Test(Signature<U, U::deserialize>*);
+
+    template <typename U>
+    static qword Test(...);
+
+    enum {
+        Value = sizeof(Test<T>(NULL)) == sizeof(dword)
     };
 };
 
