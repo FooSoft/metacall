@@ -57,16 +57,17 @@ Stream::State Stream::advance() {
     }
 
     if (socket_->wait(Socket::MASK_READ, 0)) {
-        const int bytesReceived = socket_->receive(
-            buffNet_.data(),
-            buffNet_.bytes()
+        byte buffRecv[1024];
+        const int bytesRecv = socket_->receive(
+            buffRecv,
+            sizeof(buffRecv)
         );
 
-        if (bytesReceived <= 0) {
+        if (bytesRecv <= 0) {
             return STATE_ERROR_CONNECTION;
         }
 
-        buffRecv_.addToBack(buffNet_.data(), bytesReceived);
+        buffRecv_.addToBack(buffRecv, bytesRecv);
     }
 
     return STATE_READY;

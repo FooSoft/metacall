@@ -60,7 +60,6 @@ class Stream {
     Socket*         socket_;
     Buffer          buffRecv_;
     Buffer          buffSend_;
-    Buffer          buffNet_;
 };
 
 
