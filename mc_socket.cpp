@@ -45,10 +45,12 @@ const int SOCKET_INVALID = -1;
 
 #ifdef _WIN32
 
+#pragma comment(lib, "ws2_32.lib")
+
 struct WsaScope {
     WsaScope() {
-        WSAData data; 
-        WSAStartup(MAKEWORD(2, 2), &data); 
+        WSAData data;
+        WSAStartup(MAKEWORD(2, 2), &data);
     }
 
     ~WsaScope() {

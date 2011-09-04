@@ -38,8 +38,58 @@ static const int SERVER_MAX_CLIENTS = 1;
 
 
 //
-// Local functions
+// Serial unit tests
 //
+
+static const char   serialTestData[]    = "SerializationTests";
+static const int    serialTestDataSize  = sizeof(serialTestData);
+
+struct ComplexLocalSerial {
+    bool serialize(Serializer* serializer) const {
+        printf("ComplexLocalSerial::serialize:\n");
+
+        const bool result = serializer->writeRaw(serialTestData, serialTestDataSize);
+        if (result) {
+            printf("\t[SUCCESS] Wrote data\n");
+        }
+        else {
+            printf("\t[ERROR] Error writing data\n");
+        }
+
+        return result;
+    }
+
+    bool deserialize(Deserializer* deserializer) {
+        printf("ComplexLocalSerial::deserialize:\n");
+
+        const char * data = deserializer->readRaw(serialTestDataSize);
+        if (data == NULL) {
+            printf("\t*** Error reading data\n");
+        }
+        else if (memcmp(data, serialTestData, serialTestDataSize) != 0) {
+            printf("\t*** Error reading correct data\n");
+        }
+        else {
+            printf("\tRead data\n");
+        }
+
+        const bool success = deserializer->readRaw(buffer);
+    serialTestDataSize
+
+        deserializer->
+    }
+};
+
+static void unitTestSerialization() {
+    Buffer buffer;
+
+
+
+
+
+}
+
+
 
 static void serverTest() {
     printf("Server test!\n");
