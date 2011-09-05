@@ -48,6 +48,7 @@ Token::operator unsigned() const {
 }
 
 unsigned Token::hash(const char str[]) {
+    // djb2 string hash, see http://www.cse.yorku.ca/~oz/hash.html
     unsigned hash = 5381;
     for (const char* ptr = str; *ptr != 0; ++ptr) {
         hash = (hash << 5) + hash + *ptr;

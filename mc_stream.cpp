@@ -30,6 +30,15 @@ namespace metacall {
 
 
 //
+// Constants
+//
+
+enum {
+    SOCKET_BUFFER_SIZE = 1024
+};
+
+
+//
 // Stream
 //
 
@@ -57,7 +66,7 @@ Stream::State Stream::advance() {
     }
 
     if (socket_->wait(Socket::MASK_READ, 0)) {
-        byte buffRecv[1024];
+        byte buffRecv[SOCKET_BUFFER_SIZE];
         const int bytesRecv = socket_->receive(
             buffRecv,
             sizeof(buffRecv)
@@ -79,6 +88,10 @@ void Stream::reset() {
 }
 
 Stream::State Stream::peek(PacketHeader* header, int* headerSize) {
+    if (!socket_->connected()) {
+        return STATE_ERROR_CONNECTION;
+    }
+
     Deserializer deserializer(&buffRecv_);
     if (!deserializer.read(header)) {
         return STATE_PENDING_PACKET_HEADER;

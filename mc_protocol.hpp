@@ -29,34 +29,29 @@ namespace metacall {
 
 
 //
-// Types
-//
-
-enum TaskId {
-    TASK_ID_INVALID
-};
-
-enum TaskState {
-    TASK_STATE_UNDEFINED,
-    TASK_STATE_PENDING,
-    TASK_STATE_READY,
-    TASK_STATE_ERROR
-};
-
-typedef void (*HandlerProc)(
-    class Protocol* protocol,
-    TaskId          id,
-    TaskState       state,
-    void*           userPtr
-);
-
-
-//
 // Protocol
 //
 
 class Protocol {
 public:
+    enum TaskId {
+        TASK_ID_INVALID
+    };
+
+    enum TaskState {
+        TASK_STATE_UNDEFINED,
+        TASK_STATE_PENDING,
+        TASK_STATE_READY,
+        TASK_STATE_ERROR
+    };
+
+    typedef void (*HandlerProc)(
+        class Protocol* protocol,
+        TaskId          id,
+        TaskState       state,
+        void*           userPtr
+    );
+
     Protocol(Stream* stream, Binding* binding);
 
     void            advance             ();

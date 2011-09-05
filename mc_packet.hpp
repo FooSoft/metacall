@@ -33,8 +33,7 @@ namespace metacall {
 //
 
 enum PacketConst {
-    PACKET_CONST_MAGIC      = 0x55534544,
-    PACKET_CONST_VERSION    = 1
+    PACKET_CONST_MAGIC = 0x55534544
 };
 
 enum PacketId {
@@ -49,10 +48,10 @@ enum PacketId {
 //
 
 struct PacketHeader {
-    PacketHeader() :
-        magic(0),
-        id(PACKET_ID_INVALID),
-        size(0)
+    PacketHeader(dword magic = PACKET_CONST_MAGIC, byte id = PACKET_ID_INVALID, dword size = 0) :
+        magic(magic),
+        id(id),
+        size(size)
     {
     }
 
@@ -81,9 +80,9 @@ struct PacketHeader {
 //
 
 struct PacketInvokeRequest {
-    PacketInvokeRequest() :
-        function(0),
-        taskId(0)
+    PacketInvokeRequest(dword function = 0, dword taskId = 0) :
+        function(function),
+        taskId(taskId)
     {
     }
 
@@ -116,9 +115,9 @@ struct PacketInvokeRequest {
 //
 
 struct PacketInvokeReply {
-    PacketInvokeReply() :
-        flags(0),
-        taskId(0)
+    PacketInvokeReply(dword flags = 0, dword taskId = 0) :
+        flags(flags),
+        taskId(taskId)
     {
     }
 

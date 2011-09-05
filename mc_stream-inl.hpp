@@ -36,20 +36,25 @@ Stream::State Stream::send(const T& packet) {
     Serializer serializerTemp(&buffTemp);
     serializerTemp.write(packet);
 
-    PacketHeader header;
-    header.magic    = PACKET_CONST_MAGIC;
-    header.size     = serializerTemp.offset();
-    header.id       = T::Id;
+    const PacketHeader header(
+        PACKET_CONST_MAGIC,
+        T::Id,
+        serializerTemp.offset()
+    );
 
-    Serializer serializer_send(&buffSend_);
-    serializer_send.write(header);
-    serializer_send.writeRaw(buffTemp.data(), buffTemp.bytes());
+    Serializer serializerSend(&buffSend_);
+    serializerSend.write(header);
+    serializerSend.write(buffTemp);
 
     return STATE_READY;
 }
 
 template <typename T>
 Stream::State Stream::receive(T* packet) {
+    if (!socket_->connected()) {
+        return STATE_ERROR_CONNECTION;
+    }
+
     PacketHeader header;
     int headerSize = 0;
 

@@ -84,14 +84,15 @@ void Server::getClients(std::vector<ClientId>* clients) const {
 
 bool Server::getClient(ClientId id, ClientData* data) const {
     const ClientMap::const_iterator iter = clients_.find(id);
-    if (iter != clients_.end())  {
-        data->id        = iter->first;
-        data->name      = iter->second->socket.hostname();
-        data->protocol  = &iter->second->protocol;
-        return true;
+    if (iter == clients_.end())  {
+        return false;
     }
 
-    return false;
+    data->id        = iter->first;
+    data->name      = iter->second->socket.hostname();
+    data->protocol  = &iter->second->protocol;
+
+    return true;
 }
 
 void Server::disconnect(ClientId id) {
@@ -114,7 +115,7 @@ int Server::clientCount() const {
     return clients_.size();
 }
 
-ClientId Server::clientActive() const {
+Server::ClientId Server::clientActive() const {
     return clientActive_;
 }
 
@@ -128,7 +129,11 @@ void Server::advanceConnecting() {
         return;
     }
 
-    const std::pair<ClientId, ClientEntry*> entry(registerClientId(), new ClientEntry(&binding_));
+    const std::pair<ClientId, ClientEntry*> entry(
+        registerClientId(),
+        new ClientEntry(&binding_)
+    );
+
     const ClientMap::iterator iter = clients_.insert(entry).first;
     iter->second->socket.set(client.release());
     iter->second->socket.setNagle(false);
@@ -159,10 +164,10 @@ void Server::advanceConnected() {
     clientActive_ = CLIENT_ID_INVALID;
 }
 
-ClientId Server::registerClientId() {
-    static int s_id = CLIENT_ID_INVALID;
-    while (++s_id == CLIENT_ID_INVALID);
-    return static_cast<ClientId>(s_id);
+Server::ClientId Server::registerClientId() {
+    static int id = CLIENT_ID_INVALID;
+    while (++id == CLIENT_ID_INVALID);
+    return static_cast<ClientId>(id);
 }
 
 

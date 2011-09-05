@@ -32,36 +32,38 @@ namespace metacall {
 namespace {
 
 
-//
-// Constants
-//
-
-const int SOCKET_INVALID = -1;
-
+#ifdef _WIN32
 
 //
 // Winsock
 //
 
-#ifdef _WIN32
-
 #pragma comment(lib, "ws2_32.lib")
 
-struct WsaScope {
-    WsaScope() {
+struct Winsock {
+    Winsock() {
         WSAData data;
         WSAStartup(MAKEWORD(2, 2), &data);
     }
 
-    ~WsaScope() {
+    ~Winsock() {
         WSACleanup();
     }
-} wsa;
+} winsock;
 
 #endif
 
 
 }
+
+
+//
+// Constants
+//
+
+enum {
+    SOCKET_INVALID = -1
+};
 
 
 //

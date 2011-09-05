@@ -29,32 +29,27 @@ namespace metacall {
 
 
 //
-// Types
-//
-
-enum ClientId {
-    CLIENT_ID_INVALID
-};
-
-struct ClientData {
-    ClientData() :
-        id(CLIENT_ID_INVALID),
-        protocol(NULL)
-    {
-    }
-
-    ClientId  id;
-    std::string name;
-    Protocol*   protocol;
-};
-
-
-//
 // Server
 //
 
 class Server {
 public:
+    enum ClientId {
+        CLIENT_ID_INVALID
+    };
+
+    struct ClientData {
+        ClientData() :
+            id(CLIENT_ID_INVALID),
+            protocol(NULL)
+        {
+        }
+
+        ClientId    id;
+        std::string name;
+        Protocol*   protocol;
+    };
+
     Server();
     ~Server();
 

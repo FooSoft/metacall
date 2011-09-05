@@ -41,15 +41,19 @@ namespace metacall {
 //
 
 #ifdef _WIN32
-    typedef unsigned __int8     byte;
-    typedef unsigned __int16    word;
-    typedef unsigned __int32    dword;
-    typedef unsigned __int64    qword;
+
+typedef unsigned __int8     byte;
+typedef unsigned __int16    word;
+typedef unsigned __int32    dword;
+typedef unsigned __int64    qword;
+
 #else
-    typedef unsigned char       byte;
-    typedef unsigned short      word;
-    typedef unsigned int        dword;
-    typedef unsigned long int   qword;
+
+typedef unsigned char       byte;
+typedef unsigned short      word;
+typedef unsigned int        dword;
+typedef unsigned long int   qword;
+
 #endif
 
 

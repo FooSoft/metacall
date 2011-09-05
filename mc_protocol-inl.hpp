@@ -27,7 +27,7 @@ namespace metacall {
 
 
 template <typename P1>
-TaskId Protocol::invoke(const Token& token, const P1& p1) {
+Protocol::TaskId Protocol::invoke(const Token& token, const P1& p1) {
     PacketInvokeRequest packetRequest;
 
     Serializer serializer(&packetRequest.data);
@@ -37,7 +37,7 @@ TaskId Protocol::invoke(const Token& token, const P1& p1) {
 }
 
 template <typename P1, typename P2>
-TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2) {
+Protocol::TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2) {
     PacketInvokeRequest packetRequest;
 
     Serializer serializer(&packetRequest.data);
@@ -48,7 +48,7 @@ TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2) {
 }
 
 template <typename P1, typename P2, typename P3>
-TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3& p3) {
+Protocol::TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3& p3) {
     PacketInvokeRequest packetRequest;
 
     Serializer serializer(&packetRequest.data);
@@ -60,7 +60,7 @@ TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3
 }
 
 template <typename P1, typename P2, typename P3, typename P4>
-TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3 & p3, const P4& p4) {
+Protocol::TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3 & p3, const P4& p4) {
     PacketInvokeRequest packetRequest;
     Serializer serializer(&packetRequest.data);
 
@@ -73,7 +73,7 @@ TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3
 }
 
 template <typename P1, typename P2, typename P3, typename P4, typename P5>
-TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3& p3, const P4& p4, const P5& p5) {
+Protocol::TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3& p3, const P4& p4, const P5& p5) {
     PacketInvokeRequest packetRequest;
     Serializer serializer(&packetRequest.data);
 
@@ -87,7 +87,7 @@ TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3
 }
 
 template <typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
-TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3& p3, const P4& p4, const P5& p5, const P6& p6) {
+Protocol::TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3& p3, const P4& p4, const P5& p5, const P6& p6) {
     PacketInvokeRequest packetRequest;
     Serializer serializer(&packetRequest.data);
 
@@ -102,7 +102,7 @@ TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3
 }
 
 template <typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
-TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3& p3, const P4& p4, const P5& p5, const P6& p6, const P7& p7) {
+Protocol::TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3& p3, const P4& p4, const P5& p5, const P6& p6, const P7& p7) {
     PacketInvokeRequest packetRequest;
     Serializer serializer(&packetRequest.data);
 
@@ -118,7 +118,7 @@ TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3
 }
 
 template <typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
-TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3& p3, const P4& p4, const P5& p5, const P6& p6, const P7& p7, const P8& p8) {
+Protocol::TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3& p3, const P4& p4, const P5& p5, const P6& p6, const P7& p7, const P8& p8) {
     PacketInvokeRequest packetRequest;
     Serializer serializer(&packetRequest.data);
 
@@ -135,7 +135,7 @@ TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3
 }
 
 template <typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9>
-TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3& p3, const P4& p4, const P5& p5, const P6& p6, const P7& p7, const P8& p8, const P9& p9) {
+Protocol::TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3& p3, const P4& p4, const P5& p5, const P6& p6, const P7& p7, const P8& p8, const P9& p9) {
     PacketInvokeRequest packetRequest;
     Serializer serializer(&packetRequest.data);
 
@@ -153,7 +153,7 @@ TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2, const P3
 }
 
 template <typename R>
-TaskState Protocol::queryResult(TaskId id, R* result) {
+Protocol::TaskState Protocol::queryResult(TaskId id, R* result) {
     TaskMap::const_iterator iter = taskMap_.find(id);
     if (iter == taskMap_.end()) {
         return TASK_STATE_UNDEFINED;

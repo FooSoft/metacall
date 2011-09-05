@@ -100,7 +100,7 @@ void Protocol::clearHandlers() {
     }
 }
 
-TaskState Protocol::queryState(TaskId id) const {
+Protocol::TaskState Protocol::queryState(TaskId id) const {
     const TaskMap::const_iterator iter = taskMap_.find(id);
     return iter == taskMap_.end() ? TASK_STATE_UNDEFINED : iter->second.state;
 }
@@ -179,12 +179,12 @@ Stream::State Protocol::advanceInvokeRequest() {
     return state;
 }
 
-TaskId Protocol::invoke(const Token& token) {
+Protocol::TaskId Protocol::invoke(const Token& token) {
     PacketInvokeRequest packetRequest;
     return invokeExec(token, &packetRequest);
 }
 
-TaskId Protocol::invokeExec(const Token& token, PacketInvokeRequest* packetRequest) {
+Protocol::TaskId Protocol::invokeExec(const Token& token, PacketInvokeRequest* packetRequest) {
     const TaskId taskId = registerTaskId();
 
     packetRequest->function = token;
@@ -198,7 +198,7 @@ TaskId Protocol::invokeExec(const Token& token, PacketInvokeRequest* packetReque
     return taskId;
 }
 
-TaskId Protocol::registerTaskId() {
+Protocol::TaskId Protocol::registerTaskId() {
     static int id = TASK_ID_INVALID;
     while (++id == TASK_ID_INVALID);
     return static_cast<TaskId>(id);
