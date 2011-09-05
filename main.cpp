@@ -30,11 +30,41 @@ using namespace metacall;
 
 
 //
+// Local functions
+//
+
+static void serverTest1(int value) {
+    printf("Server function %d\n", value);
+}
+
+
+//
 // Program entry
 //
 
 int main(int argc, char *argv[]) {
+    const int port = 1234;
 
+    Server server;
+    if (!server.start(port)) {
+        perror("Cannot start server\n");
+        return 1;
+    }
+
+    Client client;
+    if (!client.connect("localhost", port)) {
+        perror("Cannot connect to server\n");
+        return 1;
+    }
+
+    server.binding()->bind(FPARAM(serverTest1));
+
+    do {
+        client.protocol()->invoke("serverTest1", 1234);
+        server.advance();
+        client.advance();
+    }
+    while (server.clientCount() > 0);
 
     return 0;
 }

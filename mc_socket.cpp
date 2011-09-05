@@ -29,9 +29,6 @@
 namespace metacall {
 
 
-namespace {
-
-
 #ifdef _WIN32
 
 //
@@ -40,7 +37,7 @@ namespace {
 
 #pragma comment(lib, "ws2_32.lib")
 
-struct Winsock {
+static struct Winsock {
     Winsock() {
         WSAData data;
         WSAStartup(MAKEWORD(2, 2), &data);
@@ -52,9 +49,6 @@ struct Winsock {
 } winsock;
 
 #endif
-
-
-}
 
 
 //

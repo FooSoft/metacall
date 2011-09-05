@@ -44,7 +44,7 @@ Stream::State Stream::send(const T& packet) {
 
     Serializer serializerSend(&buffSend_);
     serializerSend.write(header);
-    serializerSend.write(buffTemp);
+    serializerSend.writeRaw(buffTemp.data(), buffTemp.bytes());
 
     return STATE_READY;
 }
