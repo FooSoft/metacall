@@ -30,11 +30,36 @@ using namespace metacall;
 
 
 //
+// Serialization
+//
+
+namespace metacall {
+
+
+bool serialize(Serializer* serializer, const char str[]) {
+    serializer->writeRaw(str, strlen(str) + 1);
+    return true;
+}
+
+bool deserialize(Deserializer* deserializer, const char ** str) {
+    *str = reinterpret_cast<const char*>(deserializer->readRaw(1));
+    if (*str == NULL) {
+        return false;
+    }
+
+    return deserializer->readRaw(strlen(*str)) != NULL;
+}
+
+
+}
+
+
+//
 // Local functions
 //
 
-static void serverTest1(int value) {
-    printf("Server function %d\n", value);
+static void serverTest1(const char str[], int num) {
+    printf("Server function params are \"%s\" and \"%d\"\n", str, num);
 }
 
 
@@ -60,7 +85,7 @@ int main(int argc, char *argv[]) {
     server.binding()->bind(FPARAM(serverTest1));
 
     do {
-        client.protocol()->invoke("serverTest1", 1234);
+        client.protocol()->invoke("serverTest1", "OneTwoThreeFour", 1234);
         server.advance();
         client.advance();
     }

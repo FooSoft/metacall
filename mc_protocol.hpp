@@ -55,15 +55,15 @@ public:
     Protocol(Stream* stream, Binding* binding);
 
     void            advance             ();
-
     void            setRate             (int rate);
-    bool            setHandler          (TaskId id, HandlerProc handler, void* userPtr = NULL);
-    void            clearHandler        (TaskId id);
-    void            clearHandlers       ();
 
     template        <typename R>
     TaskState       queryResult         (TaskId id, R* result);
-    TaskState       queryState          (TaskId id) const;
+    bool            pendingTasks        () const;
+
+    bool            setHandler          (TaskId id, HandlerProc handler, void* userPtr = NULL);
+    void            clearHandler        (TaskId id);
+    void            clearHandlers       ();
 
     TaskId          invoke              (const Token& token);
     template        <typename P1>

@@ -77,6 +77,10 @@ void Protocol::setRate(int rate) {
     rate_ = rate;
 }
 
+bool Protocol::pendingTasks() const {
+    return taskMap_.size() > 0;
+}
+
 bool Protocol::setHandler(TaskId id, HandlerProc handler, void* userPtr) {
     const TaskMap::iterator iter = taskMap_.find(id);
     if (iter == taskMap_.end() || iter->second.state != TASK_STATE_PENDING) {
@@ -98,11 +102,6 @@ void Protocol::clearHandlers() {
     for (TaskMap::iterator iter = taskMap_.begin(); iter != taskMap_.end(); ++iter) {
         iter->second.handlers.clear();
     }
-}
-
-Protocol::TaskState Protocol::queryState(TaskId id) const {
-    const TaskMap::const_iterator iter = taskMap_.find(id);
-    return iter == taskMap_.end() ? TASK_STATE_UNDEFINED : iter->second.state;
 }
 
 Stream::State Protocol::advanceStream() {
