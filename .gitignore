@@ -1,2 +1,6 @@
-Debug
-Release
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+metacall
+
