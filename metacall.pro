@@ -37,5 +37,6 @@ HEADERS += \
     mc_buffer.hpp \
     mc_binding.hpp \
     mc_binding-inl.hpp \
-    mc_prefab.hpp
+    mc_prefab.hpp \
+    mc_prefab-inl.hpp
 

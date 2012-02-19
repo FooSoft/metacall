@@ -23,19 +23,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#pragma once
-
 namespace metacall {
-
-
-//
-// C strings
-//
-
-bool serialize(Serializer* serializer, const char value[]);
-bool deserialize(Deserializer* deserializer, const char ** value);
-bool serialize(Serializer* serializer, const wchar_t value[]);
-bool deserialize(Deserializer* deserializer, const wchar_t ** value);
 
 
 //
@@ -43,9 +31,26 @@ bool deserialize(Deserializer* deserializer, const wchar_t ** value);
 //
 
 template <typename T, typename C, typename A>
-bool serialize(Serializer* serializer, const std::basic_string<T, C, A>& value);
+bool serialize(Serializer* serializer, const std::basic_string<T, C, A>& value) {
+    const T * const str = value.empty() ? NULL : value.c_str();
+    return serialize(serializer, str);
+}
+
 template <typename T, typename C, typename A>
-bool deserialize(Deserializer* deserializer, std::basic_string<T, C, A>* value);
+bool deserialize(Deserializer* deserializer, std::basic_string<T, C, A>* value) {
+    value->clear();
+
+    const T * str = NULL;
+    if (!deserialize(deserializer, &str)) {
+        return false;
+    }
+
+    if (str != NULL) {
+        *value = str;
+    }
+
+    return true;
+}
 
 
 //
@@ -53,14 +58,33 @@ bool deserialize(Deserializer* deserializer, std::basic_string<T, C, A>* value);
 //
 
 template <typename T, typename A>
-bool serialize(Serializer* serializer, const std::vector<T, A>& value);
+bool serialize(Serializer* serializer, const std::vector<T, A>& value) {
+    serializer->write(value.size());
+    for (const typename std::vector<T, A>::const_iterator iter = value.begin(); iter != value.end(); ++iter) {
+        serializer->write(*iter);
+    }
+
+    return true;
+}
+
 template <typename T, typename A>
-bool deserialize(Deserializer* deserializer, std::vector<T, A>* value);
+bool deserialize(Deserializer* deserializer, std::vector<T, A>* value) {
+    value->clear();
 
+    int length = 0;
+    if (!deserializer->read(&length)) {
+        return false;
+    }
 
-//
-// std::map
-//
+    value->reserve(length);
+    for (int i = 0; i < length; ++i) {
+        if (!deserializer->read(value->at(i))) {
+            return false;
+        }
+    }
+
+    return true;
+}
 
 
 }

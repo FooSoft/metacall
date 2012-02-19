@@ -24,7 +24,6 @@
 //
 
 #include "metacall.hpp"
-#include "mc_prefab.hpp"
 
 namespace metacall {
 
@@ -33,51 +32,58 @@ namespace metacall {
 // Local functions
 //
 
-template <typename T>
-static int genStrLen(const T str[]) {
-    int length = 0;
-    while (str[length] != 0) {
-        ++length;
-    }
+static int strLen(const char str[]) {
+    return strlen(str);
+}
 
-    return length;
+static int strLen(const wchar_t str[]) {
+    return wcslen(str);
 }
 
 template <typename T>
-static bool serializeStr(Serializer* serializer, const T str[]) {
-    serializer->writeRaw(str, sizeof(T) * (genStrLen(str) + 1));
+static bool serializeStr(Serializer* serializer, const T value[]) {
+    const int length = value == NULL ? 0 : strLen(value) + 1;
+    serializer->write(length);
+    serializer->writeRaw(value, length * sizeof(T));
     return true;
 }
 
 template <typename T>
-static bool deserializeStr(Deserializer* deserializer, const T ** str) {
-    *str = reinterpret_cast<const T*>(deserializer->readRaw(1));
-    if (*str == NULL) {
+static bool deserializeStr(Deserializer* deserializer, const T ** value) {
+    *value = NULL;
+
+    int length = 0;
+    if (!deserializer->read(&length)) {
         return false;
     }
 
-    return deserializer->readRaw(genStrLen(*str)) != NULL;
+    if (length == 0) {
+        return true;
+    }
+
+    *value = reinterpret_cast<const T*>(deserializer->readRaw(length * sizeof(T)));
+    return *value != NULL;
 }
 
 
 //
-// Shared functions
+// C strings
 //
 
-bool serialize(Serializer* serializer, const char str[]) {
-    return serializeStr(serializer, str);
+bool serialize(Serializer* serializer, const char value[]) {
+    return serializeStr(serializer, value);
 }
 
-bool deserialize(Deserializer* deserializer, const char ** str) {
-    return deserializeStr(deserializer, str);
+bool deserialize(Deserializer* deserializer, const char ** value) {
+    return deserializeStr(deserializer, value);
 }
 
-bool serialize(Serializer* serializer, const wchar_t str[]) {
-    return serializeStr(serializer, str);
+bool serialize(Serializer* serializer, const wchar_t value[]) {
+    return serializeStr(serializer, value);
 }
 
-bool deserialize(Deserializer* deserializer, const wchar_t ** str) {
-    return deserializeStr(deserializer, str);
+bool deserialize(Deserializer* deserializer, const wchar_t ** value) {
+    return deserializeStr(deserializer, value);
 }
 
 

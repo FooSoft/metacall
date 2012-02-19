@@ -63,3 +63,4 @@
 #include "mc_client.hpp"
 #include "mc_server.hpp"
 #include "mc_prefab.hpp"
+#include "mc_prefab-inl.hpp"

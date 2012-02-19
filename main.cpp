@@ -33,8 +33,8 @@ using namespace metacall;
 // Local functions
 //
 
-static void serverTest1(const char str[], int num) {
-    printf("Server function params are \"%s\" and \"%d\"\n", str, num);
+static void serverTest1(const std::string & str, int num) {
+    printf("Server function params are \"%s\" and \"%d\"\n", str.c_str(), num);
 }
 
 

@@ -24,7 +24,6 @@
 //
 
 #include "metacall.hpp"
-#include "mc_protocol.hpp"
 
 namespace metacall {
 

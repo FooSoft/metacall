@@ -24,7 +24,6 @@
 //
 
 #include "metacall.hpp"
-#include "mc_socket.hpp"
 
 namespace metacall {
 
