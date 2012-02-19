@@ -30,12 +30,40 @@ using namespace metacall;
 
 
 //
-// Local functions
+// Defines
 //
 
-static void serverTest1(const std::string & str, int num) {
-    printf("Server function params are \"%s\" and \"%d\"\n", str.c_str(), num);
+#define TEST_UNICODE
+#define TEST_ANSI
+//#define TEST_C_STRING
+#define TEST_BASIC_STRING
+
+
+//
+// C string
+//
+
+static void testCStrAnsi(const char str[]) {
+    printf("[testCStrAnsi]: '%s'\n", str);
 }
+
+static void testCStrUnicode(const wchar_t str[]) {
+    printf("[testCStrUnicode]: '%S'\n", str);
+}
+
+
+//
+// std::basic_string
+//
+
+static void testBasicStringAnsi(const std::string& str) {
+    printf("[testBasicStringAnsi]: '%s'\n", str.c_str());
+}
+
+static void testBasicStringUnicode(const std::wstring& str) {
+    wprintf(L"[testBasicStringUnicode]: '%S'\n", str.c_str());
+}
+
 
 
 //
@@ -57,10 +85,76 @@ int main(int, char *[]) {
         return 1;
     }
 
-    server.binding()->bind(FPARAM(serverTest1));
+    server.binding()->bind(FPARAM(testCStrAnsi));
+    server.binding()->bind(FPARAM(testCStrUnicode));
+
+    server.binding()->bind(FPARAM(testBasicStringAnsi));
+    server.binding()->bind(FPARAM(testBasicStringUnicode));
 
     do {
-        client.protocol()->invoke("serverTest1", "OneTwoThreeFour", 1234);
+        Protocol* const protocol = client.protocol();
+
+        //
+        // C string
+        //
+#ifdef TEST_C_STRING
+        {
+            //
+            // ANSI
+            //
+#ifdef TEST_ANSI
+            {
+                const char* strings[] = { "Hello world", "", NULL };
+                for (int i = 0; i < 3; ++i) {
+                    protocol->invoke("testCStrAnsi", strings[i]);
+                }
+            }
+#endif
+            //
+            // Unicode
+            //
+#ifdef TEST_UNICODE
+            {
+                const wchar_t* strings[] = { L"Hello world", L"", NULL };
+                for (int i = 0; i < 3; ++i) {
+                    protocol->invoke("testCStrUnicode", strings[i]);
+                }
+            }
+#endif
+        }
+#endif
+
+
+        //
+        // std::basic_string
+        //
+#ifdef TEST_BASIC_STRING
+        {
+            //
+            // ANSI
+            //
+#ifdef TEST_ANSI
+            {
+                std::string strings[] = { std::string("Hello world"), std::string() };
+                for (int i = 0; i < 2; ++i) {
+                    protocol->invoke("testBasicStringAnsi", strings[i]);
+                }
+            }
+#endif
+            //
+            // Unicode
+            //
+#ifdef TEST_UNICODE
+            {
+                std::wstring strings[] = { std::wstring(L"Hello world"), std::wstring() };
+                for (int i = 0; i < 2; ++i) {
+                    protocol->invoke("testBasicStringUnicode", strings[i]);
+                }
+            }
+#endif
+        }
+#endif
+
         server.advance();
         client.advance();
     }

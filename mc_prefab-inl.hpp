@@ -32,8 +32,7 @@ namespace metacall {
 
 template <typename T, typename C, typename A>
 bool serialize(Serializer* serializer, const std::basic_string<T, C, A>& value) {
-    const T * const str = value.empty() ? NULL : value.c_str();
-    return serialize(serializer, str);
+    return serialize(serializer, value.c_str());
 }
 
 template <typename T, typename C, typename A>

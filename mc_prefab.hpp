@@ -29,7 +29,7 @@ namespace metacall {
 
 
 //
-// C strings
+// C string
 //
 
 bool serialize(Serializer* serializer, const char value[]);
