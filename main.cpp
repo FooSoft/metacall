@@ -67,7 +67,7 @@ static void serverTest1(const char str[], int num) {
 // Program entry
 //
 
-int main(int argc, char *argv[]) {
+int main(int, char *[]) {
     const int port = 1234;
 
     Server server;

@@ -44,22 +44,22 @@ class Stream {
 
     Stream(Socket* socket);
 
-    State           advance ();
-    void            reset   ();
+    State           advance();
+    void            reset();
 
     template        <typename T>
-    State           send    (const T& packet);
+    State           send(const T& packet);
     template        <typename T>
-    State           receive (T* packet);
-    State           peek    (PacketHeader* header, int* headerSize);
+    State           receive(T* packet);
+    State           peek(PacketHeader* header, int* headerSize);
 
-    const Socket*   socket  () const;
-    Socket*         socket  ();
+    const Socket*   socket() const;
+    Socket*         socket();
 
  private:
-    Socket*         socket_;
-    Buffer          buffRecv_;
-    Buffer          buffSend_;
+    Socket*         m_socket;
+    Buffer          m_buffRecv;
+    Buffer          m_buffSend;
 };
 
 

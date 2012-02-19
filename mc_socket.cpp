@@ -140,7 +140,7 @@ bool Socket::connect(const char name[], int port) {
         return false;
     }
 
-    sockaddr_in host        = { 0 };
+    sockaddr_in host;
     host.sin_port           = htons(static_cast<unsigned short>(port));
     host.sin_family         = AF_INET;
     host.sin_addr.s_addr    = address;
@@ -156,7 +156,7 @@ bool Socket::connect(const char name[], int port) {
 bool Socket::bind(int port) {
     ASSERT(opened());
 
-    sockaddr_in host        = { 0 };
+    sockaddr_in host;
     host.sin_family         = AF_INET;
     host.sin_addr.s_addr    = INADDR_ANY;
     host.sin_port           = htons(static_cast<unsigned short>(port));
@@ -262,8 +262,9 @@ bool Socket::wait(unsigned mask, int seconds) const {
 #pragma warning(pop)
 #endif
 
-    timeval timeoutVal  = { 0 };
+    timeval timeoutVal;
     timeoutVal.tv_sec   = seconds;
+    timeoutVal.tv_usec  = 0;
 
     timeval* const timeoutPtr = seconds < 0 ? NULL : &timeoutVal;
     const int result = select(
@@ -303,7 +304,7 @@ const char* Socket::hostname() const {
         return NULL;
     }
 
-    sockaddr_in     host        = { 0 };
+    sockaddr_in     host;
     socklen_t       hostSize    = sizeof(host);
     sockaddr* const hostPtr     = reinterpret_cast<sockaddr*>(&host);
 

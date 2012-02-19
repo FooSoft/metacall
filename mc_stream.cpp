@@ -43,31 +43,31 @@ enum {
 //
 
 Stream::Stream(Socket* socket) :
-    socket_(socket)
+    m_socket(socket)
 {
 }
 
 Stream::State Stream::advance() {
-    if (!socket_->connected()) {
+    if (!m_socket->connected()) {
         return STATE_ERROR_CONNECTION;
     }
 
-    if (buffSend_.bytes() > 0 && socket_->wait(Socket::MASK_WRITE, 0)) {
-        const int bytesSent = socket_->send(
-            buffSend_.data(),
-            buffSend_.bytes()
+    if (m_buffSend.bytes() > 0 && m_socket->wait(Socket::MASK_WRITE, 0)) {
+        const int bytesSent = m_socket->send(
+            m_buffSend.data(),
+            m_buffSend.bytes()
         );
 
         if (bytesSent <= 0) {
             return STATE_ERROR_CONNECTION;
         }
 
-        buffSend_.removeFromFront(NULL, bytesSent);
+        m_buffSend.removeFromFront(NULL, bytesSent);
     }
 
-    if (socket_->wait(Socket::MASK_READ, 0)) {
+    if (m_socket->wait(Socket::MASK_READ, 0)) {
         byte buffRecv[SOCKET_BUFFER_SIZE];
-        const int bytesRecv = socket_->receive(
+        const int bytesRecv = m_socket->receive(
             buffRecv,
             sizeof(buffRecv)
         );
@@ -76,23 +76,23 @@ Stream::State Stream::advance() {
             return STATE_ERROR_CONNECTION;
         }
 
-        buffRecv_.addToBack(buffRecv, bytesRecv);
+        m_buffRecv.addToBack(buffRecv, bytesRecv);
     }
 
     return STATE_READY;
 }
 
 void Stream::reset() {
-    buffSend_.clear();
-    buffRecv_.clear();
+    m_buffSend.clear();
+    m_buffRecv.clear();
 }
 
 Stream::State Stream::peek(PacketHeader* header, int* headerSize) {
-    if (!socket_->connected()) {
+    if (!m_socket->connected()) {
         return STATE_ERROR_CONNECTION;
     }
 
-    Deserializer deserializer(&buffRecv_);
+    Deserializer deserializer(&m_buffRecv);
     if (!deserializer.read(header)) {
         return STATE_PENDING_PACKET_HEADER;
     }
@@ -104,7 +104,7 @@ Stream::State Stream::peek(PacketHeader* header, int* headerSize) {
     *headerSize = deserializer.offset();
 
     const int packetSize = static_cast<int>(header->size) + *headerSize;
-    if (buffRecv_.bytes() < packetSize) {
+    if (m_buffRecv.bytes() < packetSize) {
         return STATE_PENDING_PACKET_BODY;
     }
 
@@ -112,11 +112,11 @@ Stream::State Stream::peek(PacketHeader* header, int* headerSize) {
 }
 
 const Socket* Stream::socket() const {
-    return socket_;
+    return m_socket;
 }
 
 Socket* Stream::socket() {
-    return socket_;
+    return m_socket;
 }
 
 

@@ -28,7 +28,7 @@ namespace metacall {
 
 template <typename T>
 Stream::State Stream::send(const T& packet) {
-    if (!socket_->connected()) {
+    if (!m_socket->connected()) {
         return STATE_ERROR_CONNECTION;
     }
 
@@ -42,7 +42,7 @@ Stream::State Stream::send(const T& packet) {
         serializerTemp.offset()
     );
 
-    Serializer serializerSend(&buffSend_);
+    Serializer serializerSend(&m_buffSend);
     serializerSend.write(header);
     serializerSend.writeRaw(buffTemp.data(), buffTemp.bytes());
 
@@ -51,7 +51,7 @@ Stream::State Stream::send(const T& packet) {
 
 template <typename T>
 Stream::State Stream::receive(T* packet) {
-    if (!socket_->connected()) {
+    if (!m_socket->connected()) {
         return STATE_ERROR_CONNECTION;
     }
 
@@ -63,14 +63,14 @@ Stream::State Stream::receive(T* packet) {
         return state;
     }
 
-    buffRecv_.removeFromFront(NULL, headerSize);
+    m_buffRecv.removeFromFront(NULL, headerSize);
 
-    Deserializer deserializer(&buffRecv_);
+    Deserializer deserializer(&m_buffRecv);
     const bool success =
         deserializer.read(packet) &&
         deserializer.offset() == static_cast<int>(header.size);
 
-    buffRecv_.removeFromFront(NULL, header.size);
+    m_buffRecv.removeFromFront(NULL, header.size);
 
     return success ? STATE_READY : STATE_ERROR_PROTOCOL;
 }

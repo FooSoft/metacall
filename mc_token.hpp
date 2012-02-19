@@ -42,7 +42,7 @@ public:
 private:
     static unsigned hash(const char str[]);
 
-    unsigned value_;
+    unsigned m_value;
 };
 
 
