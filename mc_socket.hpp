@@ -43,31 +43,31 @@ public:
     Socket();
     ~Socket();
 
-    bool        open        ();
-    void        close       ();
-    int         release     ();
-    void        set         (int socket);
-    void        setNagle    (bool enable);
-    void        setBlocking (bool enable);
+    bool        open();
+    void        close();
+    int         release();
+    void        set(int socket);
+    void        setNagle(bool enable);
+    void        setBlocking(bool enable);
 
-    bool        connect     (const char name[], int port);
-    bool        bind        (int port);
-    bool        listen      (int backlog = 5);
-    bool        accept      (Socket* socket);
+    bool        connect(const char name[], int port);
+    bool        bind(int port);
+    bool        listen(int backlog = 5);
+    bool        accept(Socket* socket);
 
-    int         receive     (void* buffer, int size);
-    int         peek        (void* buffer, int size) const;
-    int         send        (const void* buffer, int size);
-    bool        wait        (unsigned mask, int seconds) const;
+    int         receive(void* buffer, int size);
+    int         peek(void* buffer, int size) const;
+    int         send(const void* buffer, int size);
+    bool        wait(unsigned mask, int seconds) const;
 
-    bool        opened      () const;
-    bool        connected   () const;
-    const char* hostname    () const;
+    bool        opened() const;
+    bool        connected() const;
+    const char* hostname() const;
 
 private:
-    static bool resolve     (const char name[], long* address);
+    static bool resolve(const char name[], long* address);
 
-    int         socket_;
+    int         m_socket;
 };
 
 

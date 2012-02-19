@@ -65,7 +65,7 @@ enum {
 //
 
 Socket::Socket() :
-    socket_(SOCKET_INVALID)
+    m_socket(SOCKET_INVALID)
 {
 }
 
@@ -75,7 +75,7 @@ Socket::~Socket() {
 
 bool Socket::open() {
     close();
-    socket_ = socket(AF_INET, SOCK_STREAM, 0);
+    m_socket = socket(AF_INET, SOCK_STREAM, 0);
     return opened();
 }
 
@@ -85,23 +85,23 @@ void Socket::close() {
     }
 
 #ifdef _WIN32
-    closesocket(socket_);
+    closesocket(m_socket);
 #else
-    ::close(socket_);
+    ::close(m_socket);
 #endif
 
-    socket_ = SOCKET_INVALID;
+    m_socket = SOCKET_INVALID;
 }
 
 int Socket::release() {
-    const int temp = socket_;
-    socket_ = SOCKET_INVALID;
+    const int temp = m_socket;
+    m_socket = SOCKET_INVALID;
     return temp;
 }
 
 void Socket::set(int socket) {
     close();
-    socket_ = socket;
+    m_socket = socket;
 }
 
 void Socket::setNagle(bool enable) {
@@ -111,7 +111,7 @@ void Socket::setNagle(bool enable) {
     const char* const   valuePtr    = reinterpret_cast<const char*>(&value);
 
     setsockopt(
-        socket_,
+        m_socket,
         IPPROTO_TCP,
         TCP_NODELAY,
         valuePtr,
@@ -124,11 +124,11 @@ void Socket::setBlocking(bool enable) {
 
 #ifdef _WIN32
     unsigned long nonBlock = enable ? 0 : 1;
-    ioctlsocket(socket_, FIONBIO, &nonBlock);
+    ioctlsocket(m_socket, FIONBIO, &nonBlock);
 #else
-    const int flagsOld = fcntl(socket_, F_GETFL);
+    const int flagsOld = fcntl(m_socket, F_GETFL);
     const int flagsNew = enable ? flagsOld & ~O_NONBLOCK : flagsOld | O_NONBLOCK;
-    fcntl(socket_, F_SETFL, flagsNew);
+    fcntl(m_socket, F_SETFL, flagsNew);
 #endif
 }
 
@@ -146,7 +146,7 @@ bool Socket::connect(const char name[], int port) {
     host.sin_addr.s_addr    = address;
 
     const sockaddr* const hostPtr = reinterpret_cast<const sockaddr*>(&host);
-    if (::connect(socket_, hostPtr, sizeof(host)) == SOCKET_INVALID) {
+    if (::connect(m_socket, hostPtr, sizeof(host)) == SOCKET_INVALID) {
         return false;
     }
 
@@ -162,7 +162,7 @@ bool Socket::bind(int port) {
     host.sin_port           = htons(static_cast<unsigned short>(port));
 
     const sockaddr* const hostPtr = reinterpret_cast<const sockaddr*>(&host);
-    if (::bind(socket_, hostPtr, sizeof(host)) == SOCKET_INVALID) {
+    if (::bind(m_socket, hostPtr, sizeof(host)) == SOCKET_INVALID) {
         return false;
     }
 
@@ -171,16 +171,16 @@ bool Socket::bind(int port) {
 
 bool Socket::listen(int backlog) {
     ASSERT(opened());
-    return ::listen(socket_, backlog) != SOCKET_INVALID;
+    return ::listen(m_socket, backlog) != SOCKET_INVALID;
 }
 
 bool Socket::accept(Socket* socket) {
     ASSERT(opened());
 
     socket->close();
-    socket->socket_ = ::accept(socket_, 0, 0);
+    socket->m_socket = ::accept(m_socket, 0, 0);
 
-    return socket->socket_ != SOCKET_INVALID;
+    return socket->m_socket != SOCKET_INVALID;
 }
 
 int Socket::receive(void* buffer, int size) {
@@ -191,7 +191,7 @@ int Socket::receive(void* buffer, int size) {
     }
 
     return recv(
-        socket_,
+        m_socket,
         static_cast<char *>(buffer),
         size,
         0
@@ -206,7 +206,7 @@ int Socket::peek(void* buffer, int size) const {
     }
 
     return recv(
-        socket_,
+        m_socket,
         static_cast<char *>(buffer),
         size,
         MSG_PEEK
@@ -221,7 +221,7 @@ int Socket::send(const void* buffer, int size) {
     }
 
     return ::send(
-        socket_,
+        m_socket,
         static_cast<const char*>(buffer),
         size,
         0
@@ -246,17 +246,17 @@ bool Socket::wait(unsigned mask, int seconds) const {
     if (mask & MASK_READ) {
         readSetUse = &readSet;
         FD_ZERO(readSetUse);
-        FD_SET(socket_, readSetUse);
+        FD_SET(m_socket, readSetUse);
     }
     if (mask & MASK_WRITE) {
         writeSetUse = &writeSet;
         FD_ZERO(writeSetUse);
-        FD_SET(socket_, writeSetUse);
+        FD_SET(m_socket, writeSetUse);
     }
     if (mask & MASK_EXCEPT) {
         exceptSetUse = &exceptSet;
         FD_ZERO(exceptSetUse);
-        FD_SET(socket_, exceptSetUse);
+        FD_SET(m_socket, exceptSetUse);
     }
 #ifdef _WIN32
 #pragma warning(pop)
@@ -268,7 +268,7 @@ bool Socket::wait(unsigned mask, int seconds) const {
 
     timeval* const timeoutPtr = seconds < 0 ? NULL : &timeoutVal;
     const int result = select(
-        socket_ + 1,
+        m_socket + 1,
         readSetUse,
         writeSetUse,
         exceptSetUse,
@@ -279,7 +279,7 @@ bool Socket::wait(unsigned mask, int seconds) const {
 }
 
 bool Socket::opened() const {
-    return socket_ != SOCKET_INVALID;
+    return m_socket != SOCKET_INVALID;
 }
 
 bool Socket::connected() const {
@@ -308,7 +308,7 @@ const char* Socket::hostname() const {
     socklen_t       hostSize    = sizeof(host);
     sockaddr* const hostPtr     = reinterpret_cast<sockaddr*>(&host);
 
-    if (getsockname(socket_, hostPtr, &hostSize) == SOCKET_INVALID) {
+    if (getsockname(m_socket, hostPtr, &hostSize) == SOCKET_INVALID) {
         return NULL;
     }
 
