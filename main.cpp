@@ -30,31 +30,6 @@ using namespace metacall;
 
 
 //
-// Serialization
-//
-
-namespace metacall {
-
-
-bool serialize(Serializer* serializer, const char str[]) {
-    serializer->writeRaw(str, strlen(str) + 1);
-    return true;
-}
-
-bool deserialize(Deserializer* deserializer, const char ** str) {
-    *str = reinterpret_cast<const char*>(deserializer->readRaw(1));
-    if (*str == NULL) {
-        return false;
-    }
-
-    return deserializer->readRaw(strlen(*str)) != NULL;
-}
-
-
-}
-
-
-//
 // Local functions
 //
 

@@ -23,43 +23,15 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#include <string>
-#include <vector>
-#include <map>
-#include <memory.h>
-#include <assert.h>
+#pragma once
 
-#ifdef _WIN32
+namespace metacall {
 
-#define NOMINMAX
-#include <ws2tcpip.h>
 
-#else
+bool serialize(Serializer* serializer, const char str[]);
+bool deserialize(Deserializer* deserializer, const char ** str);
+bool serialize(Serializer* serializer, const wchar_t str[]);
+bool deserialize(Deserializer* deserializer, const wchar_t ** str);
 
-#include <sys/socket.h>
-#include <netinet/tcp.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <unistd.h>
-#include <fcntl.h>
 
-#endif
-
-#include "mc_common.hpp"
-#include "mc_token.hpp"
-#include "mc_buffer.hpp"
-#include "mc_socket.hpp"
-#include "mc_meta.hpp"
-#include "mc_serial.hpp"
-#include "mc_serial-inl.hpp"
-#include "mc_packet.hpp"
-#include "mc_functor.hpp"
-#include "mc_binding.hpp"
-#include "mc_binding-inl.hpp"
-#include "mc_stream.hpp"
-#include "mc_stream-inl.hpp"
-#include "mc_protocol.hpp"
-#include "mc_protocol-inl.hpp"
-#include "mc_client.hpp"
-#include "mc_server.hpp"
-#include "mc_prefab.hpp"
+}

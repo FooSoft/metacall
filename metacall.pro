@@ -11,7 +11,8 @@ SOURCES += main.cpp \
     mc_protocol.cpp \
     mc_client.cpp \
     mc_buffer.cpp \
-    mc_binding.cpp
+    mc_binding.cpp \
+    mc_prefab.cpp
 
 OTHER_FILES += \
     metacall.py \
@@ -35,5 +36,6 @@ HEADERS += \
     mc_client.hpp \
     mc_buffer.hpp \
     mc_binding.hpp \
-    mc_binding-inl.hpp
+    mc_binding-inl.hpp \
+    mc_prefab.hpp
 

@@ -24,38 +24,60 @@
 //
 
 #include "metacall.hpp"
-#include "mc_token.hpp"
+#include "mc_prefab.hpp"
 
 namespace metacall {
 
 
 //
-// Token
+// Local functions
 //
 
-Token::Token(const char value[]) :
-    m_value(hash(value))
-{
-}
-
-Token::Token(unsigned value) :
-    m_value(value)
-{
-}
-
-Token::operator unsigned() const {
-    return m_value;
-}
-
-unsigned Token::hash(const char str[]) {
-    // metacall uses the djb2 string hash, see
-    // http://www.cse.yorku.ca/~oz/hash.html
-    unsigned hash = 5381;
-    for (const char* ptr = str; *ptr != 0; ++ptr) {
-        hash = (hash << 5) + hash + *ptr;
+template <typename T>
+static int genStrLen(const T str[]) {
+    int length = 0;
+    while (str[length] != 0) {
+        ++length;
     }
 
-    return hash;
+    return length;
+}
+
+template <typename T>
+static bool serializeStr(Serializer* serializer, const T str[]) {
+    serializer->writeRaw(str, sizeof(T) * (genStrLen(str) + 1));
+    return true;
+}
+
+template <typename T>
+static bool deserializeStr(Deserializer* deserializer, const T ** str) {
+    *str = reinterpret_cast<const T*>(deserializer->readRaw(1));
+    if (*str == NULL) {
+        return false;
+    }
+
+    return deserializer->readRaw(genStrLen(*str)) != NULL;
+}
+
+
+//
+// Shared functions
+//
+
+bool serialize(Serializer* serializer, const char str[]) {
+    return serializeStr(serializer, str);
+}
+
+bool deserialize(Deserializer* deserializer, const char ** str) {
+    return deserializeStr(deserializer, str);
+}
+
+bool serialize(Serializer* serializer, const wchar_t str[]) {
+    return serializeStr(serializer, str);
+}
+
+bool deserialize(Deserializer* deserializer, const wchar_t ** str) {
+    return deserializeStr(deserializer, str);
 }
 
 
