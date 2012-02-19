@@ -59,8 +59,33 @@ bool deserialize(Deserializer* deserializer, std::vector<T, A>* value);
 
 
 //
+// std::list
+//
+
+template <typename T, typename A>
+bool serialize(Serializer* serializer, const std::list<T, A>& value);
+template <typename T, typename A>
+bool deserialize(Deserializer* deserializer, std::list<T, A>* value);
+
+
+//
+// std::pair
+//
+
+template <typename T1, typename T2>
+bool serialize(Serializer* serializer, const std::pair<T1, T2>& value);
+template <typename T1, typename T2>
+bool deserialize(Deserializer* deserializer, std::pair<T1, T2>* value);
+
+
+//
 // std::map
 //
+
+template <typename K, typename V, typename C, typename A>
+bool serialize(Serializer* serializer, const std::map<K, V, C, A>& value);
+template <typename K, typename V, typename C, typename A>
+bool deserialize(Deserializer* deserializer, std::map<K, V, C, A>* value);
 
 
 }

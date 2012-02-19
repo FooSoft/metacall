@@ -76,11 +76,102 @@ bool deserialize(Deserializer* deserializer, std::vector<T, A>* value) {
         return false;
     }
 
-    value->reserve(length);
     for (int i = 0; i < length; ++i) {
-        if (!deserializer->read(value->at(i))) {
+        T item = T();
+        if (!deserializer->read(&item)) {
             return false;
         }
+
+        value->push_back(item);
+    }
+
+    return true;
+}
+
+
+//
+// std::list
+//
+
+template <typename T, typename A>
+bool serialize(Serializer* serializer, const std::list<T, A>& value) {
+    serializer->write(value.size());
+    for (const typename std::list<T, A>::const_iterator iter = value.begin(); iter != value.end(); ++iter) {
+        serializer->write(*iter);
+    }
+
+    return true;
+}
+
+template <typename T, typename A>
+bool deserialize(Deserializer* deserializer, std::list<T, A>* value) {
+    value->clear();
+
+    int length = 0;
+    if (!deserializer->read(&length)) {
+        return false;
+    }
+
+    for (int i = 0; i < length; ++i) {
+        T item = T();
+        if (!deserializer->read(&item)) {
+            return false;
+        }
+
+        value->push_back(item);
+    }
+
+    return true;
+}
+
+
+//
+// std::pair
+//
+
+template <typename T1, typename T2>
+bool serialize(Serializer* serializer, const std::pair<T1, T2>& value) {
+    serializer->write(value.first);
+    serializer->write(value.second);
+    return true;
+}
+
+template <typename T1, typename T2>
+bool deserialize(Deserializer* deserializer, std::pair<T1, T2>* value) {
+    return deserializer->read(&value->first) && deserializer->read(&value->second);
+}
+
+
+//
+// std::map
+//
+
+template <typename K, typename V, typename C, typename A>
+bool serialize(Serializer* serializer, const std::map<K, V, C, A>& value) {
+    serializer->write(value.size());
+    for (const typename std::map<K, V, C, A>::const_iterator iter = value.begin(); iter != value.end(); ++iter) {
+        serializer->write(*iter);
+    }
+
+    return true;
+}
+
+template <typename K, typename V, typename C, typename A>
+bool deserialize(Deserializer* deserializer, std::map<K, V, C, A>* value) {
+    value->clear();
+
+    int length = 0;
+    if (!deserializer->read(&length)) {
+        return false;
+    }
+
+    for (unsigned i = 0; i < length; ++i) {
+        std::pair<K, V> item;
+        if (!deserializer->read(&item)) {
+            return false;
+        }
+
+        value->insert(item);
     }
 
     return true;
