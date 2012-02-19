@@ -34,8 +34,8 @@ namespace metacall {
 //
 
 Server::Server() :
-    clientMax_(1),
-    clientActive_(CLIENT_ID_INVALID)
+    m_clientMax(1),
+    m_clientActive(CLIENT_ID_INVALID)
 {
 }
 
@@ -50,20 +50,20 @@ void Server::advance() {
 }
 
 const Binding* Server::binding() const {
-    return &binding_;
+    return &m_binding;
 }
 
 Binding* Server::binding() {
-    return &binding_;
+    return &m_binding;
 }
 
 bool Server::start(int serverPort, int clientsMax) {
     stop();
 
-    if (server_.open() && server_.bind(serverPort) && server_.listen()) {
-        server_.setBlocking(false);
-        server_.setNagle(false);
-        clientMax_ = clientsMax;
+    if (m_server.open() && m_server.bind(serverPort) && m_server.listen()) {
+        m_server.setBlocking(false);
+        m_server.setNagle(false);
+        m_clientMax = clientsMax;
         return true;
     }
 
@@ -73,18 +73,18 @@ bool Server::start(int serverPort, int clientsMax) {
 
 void Server::stop() {
     disconnectAll();
-    clientMax_ = 0;
+    m_clientMax = 0;
 }
 
-void Server::getClients(std::vector<ClientId>* clients) const {
-    for (ClientMap::const_iterator iter = clients_.begin(); iter != clients_.end(); ++iter) {
+void Server::clients(std::vector<ClientId>* clients) const {
+    for (ClientMap::const_iterator iter = m_clients.begin(); iter != m_clients.end(); ++iter) {
         clients->push_back(iter->first);
     }
 }
 
-bool Server::getClient(ClientId id, ClientData* data) const {
-    const ClientMap::const_iterator iter = clients_.find(id);
-    if (iter == clients_.end())  {
+bool Server::clients(ClientId id, ClientData* data) const {
+    const ClientMap::const_iterator iter = m_clients.find(id);
+    if (iter == m_clients.end())  {
         return false;
     }
 
@@ -96,45 +96,45 @@ bool Server::getClient(ClientId id, ClientData* data) const {
 }
 
 void Server::disconnect(ClientId id) {
-    const ClientMap::iterator iter = clients_.find(id);
-    if (iter != clients_.end()) {
+    const ClientMap::iterator iter = m_clients.find(id);
+    if (iter != m_clients.end()) {
         delete iter->second;
-        clients_.erase(iter);
+        m_clients.erase(iter);
     }
 }
 
 void Server::disconnectAll() {
-    for (ClientMap::iterator iter = clients_.begin(); iter != clients_.end(); ++iter) {
+    for (ClientMap::iterator iter = m_clients.begin(); iter != m_clients.end(); ++iter) {
         delete iter->second;
     }
 
-    clients_.clear();
+    m_clients.clear();
 }
 
 int Server::clientCount() const {
-    return clients_.size();
+    return m_clients.size();
 }
 
 Server::ClientId Server::clientActive() const {
-    return clientActive_;
+    return m_clientActive;
 }
 
 void Server::advanceConnecting() {
-    if (clientMax_ == 0 || !server_.opened()) {
+    if (m_clientMax == 0 || !m_server.opened()) {
         return;
     }
 
     Socket client;
-    if (!server_.accept(&client)) {
+    if (!m_server.accept(&client)) {
         return;
     }
 
     const std::pair<ClientId, ClientEntry*> entry(
         registerClientId(),
-        new ClientEntry(&binding_)
+        new ClientEntry(&m_binding)
     );
 
-    const ClientMap::iterator iter = clients_.insert(entry).first;
+    const ClientMap::iterator iter = m_clients.insert(entry).first;
     iter->second->socket.set(client.release());
     iter->second->socket.setNagle(false);
     iter->second->socket.setBlocking(false);
@@ -142,7 +142,7 @@ void Server::advanceConnecting() {
 
 void Server::advanceDisconnecting() {
     std::vector<ClientMap::iterator> clients;
-    for (ClientMap::iterator iter = clients_.begin(); iter != clients_.end(); ++iter) {
+    for (ClientMap::iterator iter = m_clients.begin(); iter != m_clients.end(); ++iter) {
         if (!iter->second->socket.connected()) {
             clients.push_back(iter);
         }
@@ -154,20 +154,20 @@ void Server::advanceDisconnecting() {
 }
 
 void Server::advanceConnected() {
-    ASSERT(clientActive_ == CLIENT_ID_INVALID);
+    ASSERT(m_clientActive == CLIENT_ID_INVALID);
 
-    for (ClientMap::iterator iter = clients_.begin(); iter != clients_.end(); ++iter) {
-        clientActive_ = iter->first;
+    for (ClientMap::iterator iter = m_clients.begin(); iter != m_clients.end(); ++iter) {
+        m_clientActive = iter->first;
         iter->second->protocol.advance();
     }
 
-    clientActive_ = CLIENT_ID_INVALID;
+    m_clientActive = CLIENT_ID_INVALID;
 }
 
 Server::ClientId Server::registerClientId() {
-    static int id = CLIENT_ID_INVALID;
-    while (++id == CLIENT_ID_INVALID);
-    return static_cast<ClientId>(id);
+    static int s_id = CLIENT_ID_INVALID;
+    while (++s_id == CLIENT_ID_INVALID);
+    return static_cast<ClientId>(s_id);
 }
 
 

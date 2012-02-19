@@ -42,60 +42,62 @@ Buffer::Buffer() {
 }
 
 void Buffer::addToBack(const void* data, int bytes) {
-    data_.insert(
-        data_.end(),
+    m_data.insert(
+        m_data.end(),
         static_cast<const byte*>(data),
         static_cast<const byte*>(data) + bytes
     );
 }
 
 void Buffer::addToFront(const void* data, int bytes) {
-    data_.insert(
-        data_.begin(),
+    m_data.insert(
+        m_data.begin(),
         static_cast<const byte*>(data),
         static_cast<const byte*>(data) + bytes
     );
 }
 
 int Buffer::removeFromFront(void* data, int bytes) {
-    bytes = std::min(static_cast<size_t>(bytes), data_.size());
+    bytes = std::min(static_cast<size_t>(bytes), m_data.size());
     if (data != NULL) {
-        memcpy(data, &data_[0], bytes);
+        memcpy(data, &m_data[0], bytes);
     }
-    data_.erase(data_.begin(), data_.begin() + bytes);
+
+    m_data.erase(m_data.begin(), m_data.begin() + bytes);
     return bytes;
 }
 
 int Buffer::removeFromBack(void* data, int bytes) {
-    bytes = std::min(static_cast<size_t>(bytes), data_.size());
+    bytes = std::min(static_cast<size_t>(bytes), m_data.size());
     if (data != NULL) {
-        memcpy(data, &data_[data_.size() - bytes], bytes);
+        memcpy(data, &m_data[m_data.size() - bytes], bytes);
     }
-    data_.erase(data_.end() - bytes, data_.end());
+
+    m_data.erase(m_data.end() - bytes, m_data.end());
     return bytes;
 }
 
 void Buffer::clear() {
-    data_.clear();
+    m_data.clear();
 }
 
 void Buffer::setData(const void* data, int bytes) {
-    data_.assign(
+    m_data.assign(
         static_cast<const byte*>(data),
         static_cast<const byte*>(data) + bytes
     );
 }
 
 const void* Buffer::data() const {
-    return bytes() == 0 ? NULL : &data_[0];
+    return bytes() == 0 ? NULL : &m_data[0];
 }
 
 void* Buffer::data() {
-    return bytes() == 0 ? NULL : &data_[0];
+    return bytes() == 0 ? NULL : &m_data[0];
 }
 
 int Buffer::bytes() const {
-    return data_.size();
+    return m_data.size();
 }
 
 bool Buffer::serialize(Serializer* serializer) const {

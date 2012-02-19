@@ -36,22 +36,21 @@ class Client {
 public:
     Client();
 
-    void            advance     ();
+    void            advance();
+    bool            connect(const char name[], int port);
+    void            disconnect();
+    bool            connected() const;
 
-    bool            connect     (const char name[], int port);
-    void            disconnect  ();
-    bool            connected   () const;
-
-    const Protocol* protocol    () const;
-    Protocol*       protocol    ();
-    const Binding*  binding     () const;
-    Binding*        binding     ();
+    const Protocol* protocol() const;
+    Protocol*       protocol();
+    const Binding*  binding() const;
+    Binding*        binding();
 
 private:
-    Socket          socket_;
-    Stream          stream_;
-    Binding         binding_;
-    Protocol        protocol_;
+    Socket          m_socket;
+    Stream          m_stream;
+    Binding         m_binding;
+    Protocol        m_protocol;
 };
 
 

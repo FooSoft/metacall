@@ -54,36 +54,36 @@ public:
 
     Protocol(Stream* stream, Binding* binding);
 
-    void            advance             ();
-    void            setRate             (int rate);
+    void            advance();
+    void            setRate(int rate);
 
     template        <typename R>
-    TaskState       queryResult         (TaskId id, R* result);
-    bool            pendingTasks        () const;
+    TaskState       queryResult(TaskId id, R* result);
+    bool            pendingTasks() const;
 
-    bool            setHandler          (TaskId id, HandlerProc handler, void* userPtr = NULL);
-    void            clearHandler        (TaskId id);
-    void            clearHandlers       ();
+    bool            setHandler(TaskId id, HandlerProc handler, void* userPtr = NULL);
+    void            clearHandler(TaskId id);
+    void            clearHandlers();
 
-    TaskId          invoke              (const Token& token);
+    TaskId          invoke(const Token& token);
     template        <typename P1>
-    TaskId          invoke              (const Token& token, const P1& p0);
+    TaskId          invoke(const Token& token, const P1& p0);
     template        <typename P1, typename P2>
-    TaskId          invoke              (const Token& token, const P1& p0, const P2& p1);
+    TaskId          invoke(const Token& token, const P1& p0, const P2& p1);
     template        <typename P1, typename P2, typename P3>
-    TaskId          invoke              (const Token& token, const P1& p0, const P2& p1, const P3& p2);
+    TaskId          invoke(const Token& token, const P1& p0, const P2& p1, const P3& p2);
     template        <typename P1, typename P2, typename P3, typename P4>
-    TaskId          invoke              (const Token& token, const P1& p0, const P2& p1, const P3& p2, const P4& p3);
+    TaskId          invoke(const Token& token, const P1& p0, const P2& p1, const P3& p2, const P4& p3);
     template        <typename P1, typename P2, typename P3, typename P4, typename P5>
-    TaskId          invoke              (const Token& token, const P1& p0, const P2& p1, const P3& p2, const P4& p3, const P5& p4);
+    TaskId          invoke(const Token& token, const P1& p0, const P2& p1, const P3& p2, const P4& p3, const P5& p4);
     template        <typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
-    TaskId          invoke              (const Token& token, const P1& p0, const P2& p1, const P3& p2, const P4& p3, const P5& p4, const P6& p5);
+    TaskId          invoke(const Token& token, const P1& p0, const P2& p1, const P3& p2, const P4& p3, const P5& p4, const P6& p5);
     template        <typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
-    TaskId          invoke              (const Token& token, const P1& p0, const P2& p1, const P3& p2, const P4& p3, const P5& p4, const P6& p5, const P7& p6);
+    TaskId          invoke(const Token& token, const P1& p0, const P2& p1, const P3& p2, const P4& p3, const P5& p4, const P6& p5, const P7& p6);
     template        <typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
-    TaskId          invoke              (const Token& token, const P1& p0, const P2& p1, const P3& p2, const P4& p3, const P5& p4, const P6& p5, const P7& p6, const P8& p7);
+    TaskId          invoke(const Token& token, const P1& p0, const P2& p1, const P3& p2, const P4& p3, const P5& p4, const P6& p5, const P7& p6, const P8& p7);
     template        <typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9>
-    TaskId          invoke              (const Token& token, const P1& p0, const P2& p1, const P3& p2, const P4& p3, const P5& p4, const P6& p5, const P7& p6, const P8& p7, const P9& p8);
+    TaskId          invoke(const Token& token, const P1& p0, const P2& p1, const P3& p2, const P4& p3, const P5& p4, const P6& p5, const P7& p6, const P8& p7, const P9& p8);
 
 private:
     struct HandlerEntry {
@@ -109,18 +109,18 @@ private:
         Buffer      data;
     };
 
-    Stream::State   advanceStream       ();
+    Stream::State   advanceStream();
     Stream::State   advanceInvokeRequest();
-    Stream::State   advanceInvokeReply  ();
+    Stream::State   advanceInvokeReply();
 
-    TaskId          invokeExec          (const Token& token, PacketInvokeRequest* packetRequest);
-    static TaskId   registerTaskId      ();
+    TaskId          invokeExec(const Token& token, PacketInvokeRequest* packetRequest);
+    static TaskId   registerTaskId();
 
     typedef         std::map<TaskId, TaskEntry> TaskMap;
-    TaskMap         taskMap_;
-    Stream*         stream_;
-    Binding*        binding_;
-    int             rate_;
+    TaskMap         m_taskMap;
+    Stream*         m_stream;
+    Binding*        m_binding;
+    int             m_rate;
 };
 
 

@@ -37,14 +37,14 @@ public:
     Deserializer(const Buffer* data);
 
     template        <typename T>
-    bool            read        (T* data);
-    const byte*     readRaw     (int size);
-    bool            setOffset   (int offset, bool relative);
-    int             offset      () const;
+    bool            read(T* data);
+    const byte*     readRaw(int size);
+    bool            setOffset(int offset, bool relative);
+    int             offset() const;
 
 private:
-    const Buffer*   data_;
-    int             offset_;
+    const Buffer*   m_data;
+    int             m_offset;
 };
 
 
@@ -57,14 +57,14 @@ public:
     Serializer(Buffer* data);
 
     template    <typename T>
-    bool        write       (const T& data);
-    bool        writeRaw    (const void* data, int size);
-    bool        setOffset   (int offset, bool relative);
-    int         offset      () const;
+    bool        write(const T& data);
+    bool        writeRaw(const void* data, int size);
+    bool        setOffset(int offset, bool relative);
+    int         offset() const;
 
 private:
-    Buffer*     data_;
-    int         offset_;
+    Buffer*     m_data;
+    int         m_offset;
 };
 
 

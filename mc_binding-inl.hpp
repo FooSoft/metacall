@@ -32,8 +32,8 @@ namespace metacall {
 
 template <typename R>
 bool Binding::bind(const Token& token, R(*function)()) {
-    if (functors_.find(token) == functors_.end()) {
-        functors_[token] = new Functor0p<R>(function);
+    if (m_functors.find(token) == m_functors.end()) {
+        m_functors[token] = new Functor0p<R>(function);
         return true;
     }
 
@@ -42,8 +42,8 @@ bool Binding::bind(const Token& token, R(*function)()) {
 
 template <typename R, typename P1>
 bool Binding::bind(const Token& token, R(*function)(P1)) {
-    if (functors_.find(token) == functors_.end()) {
-        functors_[token] = new Functor1p<R, P1>(function);
+    if (m_functors.find(token) == m_functors.end()) {
+        m_functors[token] = new Functor1p<R, P1>(function);
         return true;
     }
 
@@ -52,8 +52,8 @@ bool Binding::bind(const Token& token, R(*function)(P1)) {
 
 template <typename R, typename P1, typename P2>
 bool Binding::bind(const Token& token, R(*function)(P1, P2)) {
-    if (functors_.find(token) == functors_.end()) {
-        functors_[token] = new Functor2p<R, P1, P2>(function);
+    if (m_functors.find(token) == m_functors.end()) {
+        m_functors[token] = new Functor2p<R, P1, P2>(function);
         return true;
     }
 
@@ -62,8 +62,8 @@ bool Binding::bind(const Token& token, R(*function)(P1, P2)) {
 
 template <typename R, typename P1, typename P2, typename P3>
 bool Binding::bind(const Token& token, R(*function)(P1, P2, P3)) {
-    if (functors_.find(token) == functors_.end()) {
-        functors_[token] = new Functor3p<R, P1, P2, P3>(function);
+    if (m_functors.find(token) == m_functors.end()) {
+        m_functors[token] = new Functor3p<R, P1, P2, P3>(function);
         return true;
     }
 
@@ -72,8 +72,8 @@ bool Binding::bind(const Token& token, R(*function)(P1, P2, P3)) {
 
 template <typename R, typename P1, typename P2, typename P3, typename P4>
 bool Binding::bind(const Token& token, R(*function)(P1, P2, P3, P4)) {
-    if (functors_.find(token) == functors_.end()) {
-        functors_[token] = new Functor4p<R, P1, P2, P3, P4>(function);
+    if (m_functors.find(token) == m_functors.end()) {
+        m_functors[token] = new Functor4p<R, P1, P2, P3, P4>(function);
         return true;
     }
 
@@ -82,8 +82,8 @@ bool Binding::bind(const Token& token, R(*function)(P1, P2, P3, P4)) {
 
 template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5>
 bool Binding::bind(const Token& token, R(*function)(P1, P2, P3, P4, P5)) {
-    if (functors_.find(token) == functors_.end()) {
-        functors_[token] = new Functor5p<R, P1, P2, P3, P4, P5>(function);
+    if (m_functors.find(token) == m_functors.end()) {
+        m_functors[token] = new Functor5p<R, P1, P2, P3, P4, P5>(function);
         return true;
     }
 
@@ -92,8 +92,8 @@ bool Binding::bind(const Token& token, R(*function)(P1, P2, P3, P4, P5)) {
 
 template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
 bool Binding::bind(const Token& token, R(*function)(P1, P2, P3, P4, P5, P6)) {
-    if (functors_.find(token) == functors_.end()) {
-        functors_[token] = new Functor6p<R, P1, P2, P3, P4, P5, P6>(function);
+    if (m_functors.find(token) == m_functors.end()) {
+        m_functors[token] = new Functor6p<R, P1, P2, P3, P4, P5, P6>(function);
         return true;
     }
 
@@ -102,8 +102,8 @@ bool Binding::bind(const Token& token, R(*function)(P1, P2, P3, P4, P5, P6)) {
 
 template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
 bool Binding::bind(const Token& token, R(*function)(P1, P2, P3, P4, P5, P6, P7)) {
-    if (functors_.find(token) == functors_.end()) {
-        functors_[token] = new Functor7p<R, P1, P2, P3, P4, P5, P6, P7>(function);
+    if (m_functors.find(token) == m_functors.end()) {
+        m_functors[token] = new Functor7p<R, P1, P2, P3, P4, P5, P6, P7>(function);
         return true;
     }
 
@@ -112,8 +112,8 @@ bool Binding::bind(const Token& token, R(*function)(P1, P2, P3, P4, P5, P6, P7))
 
 template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
 bool Binding::bind(const Token& token, R(*function)(P1, P2, P3, P4, P5, P6, P7, P8)) {
-    if (functors_.find(token) == functors_.end()) {
-        functors_[token] = new Functor8p<R, P1, P2, P3, P4, P5, P6, P7, P8>(function);
+    if (m_functors.find(token) == m_functors.end()) {
+        m_functors[token] = new Functor8p<R, P1, P2, P3, P4, P5, P6, P7, P8>(function);
         return true;
     }
 
@@ -122,8 +122,8 @@ bool Binding::bind(const Token& token, R(*function)(P1, P2, P3, P4, P5, P6, P7, 
 
 template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9>
 bool Binding::bind(const Token& token, R(*function)(P1, P2, P3, P4, P5, P6, P7, P8, P9)) {
-    if (functors_.find(token) == functors_.end()) {
-        functors_[token] = new Functor9p<R, P1, P2, P3, P4, P5, P6, P7, P8, P9>(function);
+    if (m_functors.find(token) == m_functors.end()) {
+        m_functors[token] = new Functor9p<R, P1, P2, P3, P4, P5, P6, P7, P8, P9>(function);
         return true;
     }
 

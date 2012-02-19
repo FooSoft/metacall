@@ -34,25 +34,25 @@ namespace metacall {
 //
 
 Protocol::Protocol(Stream* stream, Binding* binding) :
-    stream_(stream),
-    binding_(binding),
-    rate_(64)
+    m_stream(stream),
+    m_binding(binding),
+    m_rate(64)
 {
 }
 
 void Protocol::advance() {
-    if (!stream_->socket()->connected()) {
+    if (!m_stream->socket()->connected()) {
         return;
     }
 
-    for (int i = 0; i < rate_; ++i) {
+    for (int i = 0; i < m_rate; ++i) {
         if (advanceStream() != Stream::STATE_READY) {
             break;
         }
     }
 
     std::vector<TaskMap::iterator> processed;
-    for (TaskMap::iterator iter = taskMap_.begin(); iter != taskMap_.end(); ++iter) {
+    for (TaskMap::iterator iter = m_taskMap.begin(); iter != m_taskMap.end(); ++iter) {
         TaskEntry& entry = iter->second;
         switch (entry.state) {
             case TASK_STATE_READY:
@@ -69,21 +69,21 @@ void Protocol::advance() {
     }
 
     for (size_t i = 0; i < processed.size(); ++i) {
-        taskMap_.erase(processed[i]);
+        m_taskMap.erase(processed[i]);
     }
 }
 
 void Protocol::setRate(int rate) {
-    rate_ = rate;
+    m_rate = rate;
 }
 
 bool Protocol::pendingTasks() const {
-    return taskMap_.size() > 0;
+    return m_taskMap.size() > 0;
 }
 
 bool Protocol::setHandler(TaskId id, HandlerProc handler, void* userPtr) {
-    const TaskMap::iterator iter = taskMap_.find(id);
-    if (iter == taskMap_.end() || iter->second.state != TASK_STATE_PENDING) {
+    const TaskMap::iterator iter = m_taskMap.find(id);
+    if (iter == m_taskMap.end() || iter->second.state != TASK_STATE_PENDING) {
         return false;
     }
 
@@ -92,25 +92,25 @@ bool Protocol::setHandler(TaskId id, HandlerProc handler, void* userPtr) {
 }
 
 void Protocol::clearHandler(TaskId id) {
-    const TaskMap::iterator iter = taskMap_.find(id);
-    if (iter != taskMap_.end()) {
-        taskMap_.erase(iter);
+    const TaskMap::iterator iter = m_taskMap.find(id);
+    if (iter != m_taskMap.end()) {
+        m_taskMap.erase(iter);
     }
 }
 
 void Protocol::clearHandlers() {
-    for (TaskMap::iterator iter = taskMap_.begin(); iter != taskMap_.end(); ++iter) {
+    for (TaskMap::iterator iter = m_taskMap.begin(); iter != m_taskMap.end(); ++iter) {
         iter->second.handlers.clear();
     }
 }
 
 Stream::State Protocol::advanceStream() {
-    stream_->advance();
+    m_stream->advance();
 
     PacketHeader header;
     int headerSize = 0;
 
-    Stream::State state = stream_->peek(&header, &headerSize);
+    Stream::State state = m_stream->peek(&header, &headerSize);
     if (state == Stream::STATE_READY) {
         switch (header.id) {
             case PACKET_ID_FUNCTION_CALL_REQUEST:
@@ -132,10 +132,10 @@ Stream::State Protocol::advanceInvokeReply() {
     PacketInvokeReply packetReply;
     Deserializer deserializer(&packetReply.data);
 
-    Stream::State state = stream_->receive(&packetReply);
+    Stream::State state = m_stream->receive(&packetReply);
     if (state == Stream::STATE_READY) {
-        const TaskMap::iterator iter = taskMap_.find(static_cast<TaskId>(packetReply.taskId));
-        if (iter == taskMap_.end()) {
+        const TaskMap::iterator iter = m_taskMap.find(static_cast<TaskId>(packetReply.taskId));
+        if (iter == m_taskMap.end()) {
             state = Stream::STATE_ERROR_PROTOCOL;
         }
         else {
@@ -155,13 +155,13 @@ Stream::State Protocol::advanceInvokeRequest() {
     PacketInvokeRequest packetRequest;
     Deserializer deserializer(&packetRequest.data);
 
-    const Stream::State state = stream_->receive(&packetRequest);
+    const Stream::State state = m_stream->receive(&packetRequest);
     if (state == Stream::STATE_READY) {
         PacketInvokeReply packetReply;
         packetReply.taskId = packetRequest.taskId;
 
         Serializer serializer(&packetReply.data);
-        switch (binding_->call(packetRequest.function, &deserializer, &serializer)) {
+        switch (m_binding->call(packetRequest.function, &deserializer, &serializer)) {
             case Binding::CALL_RESULT_INVALID_ARGS:
                 packetReply.flags |= PacketInvokeReply::FLAG_INVALID_ARGS;
                 break;
@@ -172,7 +172,7 @@ Stream::State Protocol::advanceInvokeRequest() {
                 break;
         }
 
-        stream_->send(packetReply);
+        m_stream->send(packetReply);
     }
 
     return state;
@@ -189,18 +189,18 @@ Protocol::TaskId Protocol::invokeExec(const Token& token, PacketInvokeRequest* p
     packetRequest->function = token;
     packetRequest->taskId   = taskId;
 
-    if (stream_->send(*packetRequest) != Stream::STATE_READY) {
+    if (m_stream->send(*packetRequest) != Stream::STATE_READY) {
         return TASK_ID_INVALID;
     }
 
-    taskMap_[taskId] = TaskEntry();
+    m_taskMap[taskId] = TaskEntry();
     return taskId;
 }
 
 Protocol::TaskId Protocol::registerTaskId() {
-    static int id = TASK_ID_INVALID;
-    while (++id == TASK_ID_INVALID);
-    return static_cast<TaskId>(id);
+    static int s_id = TASK_ID_INVALID;
+    while (++s_id == TASK_ID_INVALID);
+    return static_cast<TaskId>(s_id);
 }
 
 

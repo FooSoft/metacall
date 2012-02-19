@@ -49,17 +49,17 @@ public:
     typedef R(*F)();
 
     Functor0p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
     bool call(Deserializer*, Serializer* ret) const {
-        ret->write(function_());
+        ret->write(m_function());
         return true;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 template <>
@@ -68,17 +68,17 @@ public:
     typedef void(*F)();
 
     Functor0p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
     bool call(Deserializer*, Serializer*) const {
-        function_();
+        m_function();
         return true;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 
@@ -92,7 +92,7 @@ public:
     typedef R (*F)(P1);
 
     Functor1p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
@@ -101,14 +101,14 @@ public:
 
         const bool success = args->read(&p1);
         if (success) {
-            ret->write(function_(p1));
+            ret->write(m_function(p1));
         }
 
         return success;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 template <typename P1>
@@ -117,7 +117,7 @@ public:
     typedef void (*F)(P1);
 
     Functor1p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
@@ -126,14 +126,14 @@ public:
 
         const bool success = args->read(&p1);
         if (success) {
-            function_(p1);
+            m_function(p1);
         }
 
         return success;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 
@@ -147,7 +147,7 @@ public:
     typedef R (*F)(P1, P2);
 
     Functor2p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
@@ -160,14 +160,14 @@ public:
             args->read(&p2);
 
         if (success) {
-            ret->write(function_(p1, p2));
+            ret->write(m_function(p1, p2));
         }
 
         return success;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 template <typename P1, typename P2>
@@ -176,7 +176,7 @@ public:
     typedef void (*F)(P1, P2);
 
     Functor2p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
@@ -189,14 +189,14 @@ public:
             args->read(&p2);
 
         if (success) {
-            function_(p1, p2);
+            m_function(p1, p2);
         }
 
         return success;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 
@@ -210,7 +210,7 @@ public:
     typedef R (*F)(P1, P2, P3);
 
     Functor3p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
@@ -225,14 +225,14 @@ public:
             args->read(&p3);
 
         if (success) {
-            ret->write(function_(p1, p2, p3));
+            ret->write(m_function(p1, p2, p3));
         }
 
         return success;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 template <typename P1, typename P2, typename P3>
@@ -241,7 +241,7 @@ public:
     typedef void (*F)(P1, P2, P3);
 
     Functor3p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
@@ -256,14 +256,14 @@ public:
             args->read(&p3);
 
         if (success) {
-            function_(p1, p2, p3);
+            m_function(p1, p2, p3);
         }
 
         return success;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 
@@ -277,7 +277,7 @@ public:
     typedef R (*F)(P1, P2, P3, P4);
 
     Functor4p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
@@ -294,14 +294,14 @@ public:
             args->read(&p4);
 
         if (success) {
-            ret->write(function_(p1, p2, p3, p4));
+            ret->write(m_function(p1, p2, p3, p4));
         }
 
         return success;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 template <typename P1, typename P2, typename P3, typename P4>
@@ -310,7 +310,7 @@ public:
     typedef void (*F)(P1, P2, P3, P4);
 
     Functor4p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
@@ -327,14 +327,14 @@ public:
             args->read(&p4);
 
         if (success) {
-            function_(p1, p2, p3, p4);
+            m_function(p1, p2, p3, p4);
         }
 
         return success;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 
@@ -348,7 +348,7 @@ public:
     typedef R (*F)(P1, P2, P3, P4, P5);
 
     Functor5p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
@@ -367,14 +367,14 @@ public:
             args->read(&p5);
 
         if (success) {
-            ret->write(function_(p1, p2, p3, p4, p5));
+            ret->write(m_function(p1, p2, p3, p4, p5));
         }
 
         return success;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 template <typename P1, typename P2, typename P3, typename P4, typename P5>
@@ -383,7 +383,7 @@ public:
     typedef void (*F)(P1, P2, P3, P4, P5);
 
     Functor5p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
@@ -402,14 +402,14 @@ public:
             args->read(&p5);
 
         if (success) {
-            function_(p1, p2, p3, p4, p5);
+            m_function(p1, p2, p3, p4, p5);
         }
 
         return success;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 
@@ -423,7 +423,7 @@ public:
     typedef R (*F)(P1, P2, P3, P4, P5, P6);
 
     Functor6p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
@@ -444,14 +444,14 @@ public:
             args->read(&p6);
 
         if (success) {
-            ret->write(function_(p1, p2, p3, p4, p5, p6));
+            ret->write(m_function(p1, p2, p3, p4, p5, p6));
         }
 
         return success;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 template <typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
@@ -460,7 +460,7 @@ public:
     typedef void (*F)(P1, P2, P3, P4, P5, P6);
 
     Functor6p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
@@ -481,14 +481,14 @@ public:
             args->read(&p6);
 
         if (success) {
-            function_(p1, p2, p3, p4, p5, p6);
+            m_function(p1, p2, p3, p4, p5, p6);
         }
 
         return success;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 
@@ -502,7 +502,7 @@ public:
     typedef R (*F)(P1, P2, P3, P4, P5, P6, P7);
 
     Functor7p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
@@ -525,14 +525,14 @@ public:
             args->read(&p7);
 
         if (success) {
-            ret->write(function_(p1, p2, p3, p4, p5, p6, p7));
+            ret->write(m_function(p1, p2, p3, p4, p5, p6, p7));
         }
 
         return success;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 template <typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
@@ -541,7 +541,7 @@ public:
     typedef void (*F)(P1, P2, P3, P4, P5, P6, P7);
 
     Functor7p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
@@ -564,14 +564,14 @@ public:
             args->read(&p7);
 
         if (success) {
-            function_(p1, p2, p3, p4, p5, p6, p7);
+            m_function(p1, p2, p3, p4, p5, p6, p7);
         }
 
         return success;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 
@@ -585,7 +585,7 @@ public:
     typedef R (*F)(P1, P2, P3, P4, P5, P6, P7, P8);
 
     Functor8p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
@@ -610,14 +610,14 @@ public:
             args->read(&p8);
 
         if (success) {
-            ret->write(function_(p1, p2, p3, p4, p5, p6, p7, p8));
+            ret->write(m_function(p1, p2, p3, p4, p5, p6, p7, p8));
         }
 
         return success;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 template <typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
@@ -626,7 +626,7 @@ public:
     typedef void (*F)(P1, P2, P3, P4, P5, P6, P7, P8);
 
     Functor8p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
@@ -651,14 +651,14 @@ public:
             args->read(&p8);
 
         if (success) {
-            function_(p1, p2, p3, p4, p5, p6, p7, p8);
+            m_function(p1, p2, p3, p4, p5, p6, p7, p8);
         }
 
         return success;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 
@@ -672,7 +672,7 @@ public:
     typedef R (*F)(P1, P2, P3, P4, P5, P6, P7, P8, P9);
 
     Functor9p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
@@ -699,14 +699,14 @@ public:
             args->read(&p9);
 
         if (success) {
-            ret->write(function_(p1, p2, p3, p4, p5, p6, p7, p8, p9));
+            ret->write(m_function(p1, p2, p3, p4, p5, p6, p7, p8, p9));
         }
 
         return success;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 template <typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9>
@@ -715,7 +715,7 @@ public:
     typedef void (*F)(P1, P2, P3, P4, P5, P6, P7, P8, P9);
 
     Functor9p(F function) :
-        function_(function)
+        m_function(function)
     {
     }
 
@@ -742,14 +742,14 @@ public:
             args->read(&p9);
 
         if (success) {
-            function_(p1, p2, p3, p4, p5, p6, p7, p8, p9);
+            m_function(p1, p2, p3, p4, p5, p6, p7, p8, p9);
         }
 
         return success;
     }
 
 private:
-    F function_;
+    F m_function;
 };
 
 

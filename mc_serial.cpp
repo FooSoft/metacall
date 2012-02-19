@@ -34,31 +34,31 @@ namespace metacall {
 //
 
 Deserializer::Deserializer(const Buffer* data) :
-    data_(data),
-    offset_(0)
+    m_data(data),
+    m_offset(0)
 {
 }
 
 const byte* Deserializer::readRaw(int size) {
-    if (data_ == NULL || size > data_->bytes() - offset_) {
+    if (m_data == NULL || size > m_data->bytes() - m_offset) {
         return NULL;
     }
 
-    const byte* data = static_cast<const byte*>(data_->data()) + offset_;
-    offset_ += size;
+    const byte* data = static_cast<const byte*>(m_data->data()) + m_offset;
+    m_offset += size;
 
     return data;
 }
 
 int Deserializer::offset() const {
-    return offset_;
+    return m_offset;
 }
 
 bool Deserializer::setOffset(int offset, bool relative) {
-    const int offsetNew = relative ? offset_ + offset : offset;
+    const int offsetNew = relative ? m_offset + offset : offset;
 
-    if (offsetNew >= 0 && offsetNew <= data_->bytes()) {
-        offset_ = offsetNew;
+    if (offsetNew >= 0 && offsetNew <= m_data->bytes()) {
+        m_offset = offsetNew;
         return true;
     }
 
@@ -71,25 +71,25 @@ bool Deserializer::setOffset(int offset, bool relative) {
 //
 
 Serializer::Serializer(Buffer* data) :
-    data_(data),
-    offset_(0)
+    m_data(data),
+    m_offset(0)
 {
 }
 
 bool Serializer::writeRaw(const void* data, int size) {
-    if (data_ != NULL) {
-        data_->addToBack(static_cast<const byte*>(data), size);
-        offset_ += size;
+    if (m_data != NULL) {
+        m_data->addToBack(static_cast<const byte*>(data), size);
+        m_offset += size;
     }
 
     return true;
 }
 
 bool Serializer::setOffset(int offset, bool relative) {
-    const int offsetNew = relative ? offset_ + offset : offset;
+    const int offsetNew = relative ? m_offset + offset : offset;
 
-    if (offsetNew >= 0 && offsetNew <= data_->bytes()) {
-        offset_ = offsetNew;
+    if (offsetNew >= 0 && offsetNew <= m_data->bytes()) {
+        m_offset = offsetNew;
         return true;
     }
 
@@ -97,7 +97,7 @@ bool Serializer::setOffset(int offset, bool relative) {
 }
 
 int Serializer::offset() const {
-    return offset_;
+    return m_offset;
 }
 
 

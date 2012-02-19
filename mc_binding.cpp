@@ -37,9 +37,9 @@ Binding::~Binding() {
 }
 
 Binding::CallResult Binding::call(const Token& token, Deserializer* args, Serializer* ret) const {
-    const FunctorMap::const_iterator iter = functors_.find(token);
+    const FunctorMap::const_iterator iter = m_functors.find(token);
 
-    if (iter == functors_.end()) {
+    if (iter == m_functors.end()) {
         return CALL_RESULT_UNBOUND_FUNC;
     }
     if (!iter->second->call(args, ret)) {
@@ -50,19 +50,19 @@ Binding::CallResult Binding::call(const Token& token, Deserializer* args, Serial
 }
 
 void Binding::unbind(const Token& token) {
-    FunctorMap::iterator iter = functors_.find(token);
-    if (iter != functors_.end()) {
+    FunctorMap::iterator iter = m_functors.find(token);
+    if (iter != m_functors.end()) {
         delete iter->second;
-        functors_.erase(iter);
+        m_functors.erase(iter);
     }
 }
 
 void Binding::unbindAll() {
-    for (FunctorMap::iterator iter = functors_.begin(); iter != functors_.end(); ++iter) {
+    for (FunctorMap::iterator iter = m_functors.begin(); iter != m_functors.end(); ++iter) {
         delete iter->second;
     }
 
-    functors_.clear();
+    m_functors.clear();
 }
 
 

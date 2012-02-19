@@ -46,7 +46,7 @@ static struct Winsock {
     ~Winsock() {
         WSACleanup();
     }
-} winsock;
+} s_winsock;
 
 #endif
 

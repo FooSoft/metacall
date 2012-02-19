@@ -37,22 +37,22 @@ public:
     Buffer(const void* data, int bytes);
     Buffer();
 
-    void                addToBack       (const void* data, int bytes);
-    void                addToFront      (const void* data, int bytes);
-    int                 removeFromFront (void* data, int bytes);
-    int                 removeFromBack  (void* data, int bytes);
-    void                clear           ();
+    void                addToBack(const void* data, int bytes);
+    void                addToFront(const void* data, int bytes);
+    int                 removeFromFront(void* data, int bytes);
+    int                 removeFromBack(void* data, int bytes);
+    void                clear();
 
-    void                setData         (const void* data, int bytes);
-    const void*         data            () const;
-    void*               data            ();
-    int                 bytes           () const;
+    void                setData(const void* data, int bytes);
+    const void*         data() const;
+    void*               data();
+    int                 bytes() const;
 
-    bool                serialize       (Serializer* serializer) const;
-    bool                deserialize     (Deserializer* deserializer);
+    bool                serialize(Serializer* serializer) const;
+    bool                deserialize(Deserializer* deserializer);
 
 private:
-    std::vector<byte>   data_;
+    std::vector<byte>   m_data;
 };
 
 

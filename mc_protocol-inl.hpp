@@ -154,8 +154,8 @@ Protocol::TaskId Protocol::invoke(const Token& token, const P1& p1, const P2& p2
 
 template <typename R>
 Protocol::TaskState Protocol::queryResult(TaskId id, R* result) {
-    TaskMap::const_iterator iter = taskMap_.find(id);
-    if (iter == taskMap_.end()) {
+    TaskMap::const_iterator iter = m_taskMap.find(id);
+    if (iter == m_taskMap.end()) {
         return TASK_STATE_UNDEFINED;
     }
 

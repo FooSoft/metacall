@@ -53,18 +53,18 @@ public:
     Server();
     ~Server();
 
-    void            advance                 ();
-    bool            start                   (int serverPort, int clientsMax = 1);
-    void            stop                    ();
-    void            disconnect              (ClientId id);
-    void            disconnectAll           ();
+    void            advance();
+    bool            start(int serverPort, int clientsMax = 1);
+    void            stop();
+    void            disconnect(ClientId id);
+    void            disconnectAll();
 
-    void            getClients              (std::vector<ClientId>* clients) const;
-    bool            getClient               (ClientId id, ClientData* data) const;
-    ClientId        clientActive            () const;
-    int             clientCount             () const;
-    const Binding*  binding                 () const;
-    Binding*        binding                 ();
+    void            clients(std::vector<ClientId>* clients) const;
+    bool            clients(ClientId id, ClientData* data) const;
+    ClientId        clientActive() const;
+    int             clientCount() const;
+    const Binding*  binding() const;
+    Binding*        binding();
 
 private:
     struct ClientEntry : public ClientData {
@@ -79,17 +79,17 @@ private:
         Protocol    protocol;
     };
 
-    void            advanceConnecting       ();
-    void            advanceConnected        ();
-    void            advanceDisconnecting    ();
-    static ClientId registerClientId        ();
+    void            advanceConnecting();
+    void            advanceConnected();
+    void            advanceDisconnecting();
+    static ClientId registerClientId();
 
     typedef         std::map<ClientId, ClientEntry*> ClientMap;
-    ClientMap       clients_;
-    int             clientMax_;
-    ClientId        clientActive_;
-    Socket          server_;
-    Binding         binding_;
+    ClientMap       m_clients;
+    int             m_clientMax;
+    ClientId        m_clientActive;
+    Socket          m_server;
+    Binding         m_binding;
 };
 
 

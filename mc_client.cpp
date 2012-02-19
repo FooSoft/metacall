@@ -34,18 +34,18 @@ namespace metacall {
 //
 
 Client::Client() :
-    stream_(&socket_),
-    protocol_(&stream_, &binding_)
+    m_stream(&m_socket),
+    m_protocol(&m_stream, &m_binding)
 {
 }
 
 void Client::advance() {
-    if (!socket_.opened()) {
+    if (!m_socket.opened()) {
         return;
     }
 
-    if (socket_.connected()) {
-        protocol_.advance();
+    if (m_socket.connected()) {
+        m_protocol.advance();
     }
     else {
         disconnect();
@@ -55,42 +55,42 @@ void Client::advance() {
 bool Client::connect(const char name[], int port) {
     disconnect();
 
-    socket_.open();
-    socket_.setNagle(false);
+    m_socket.open();
+    m_socket.setNagle(false);
 
-    if (!socket_.connect(name, port)) {
+    if (!m_socket.connect(name, port)) {
         disconnect();
         return false;
     }
 
-    socket_.setBlocking(false);
+    m_socket.setBlocking(false);
     return true;
 }
 
 void Client::disconnect() {
-    protocol_.clearHandlers();
-    stream_.reset();
-    socket_.close();
+    m_protocol.clearHandlers();
+    m_stream.reset();
+    m_socket.close();
 }
 
 bool Client::connected() const {
-    return socket_.connected();
+    return m_socket.connected();
 }
 
 const Protocol* Client::protocol() const {
-    return &protocol_;
+    return &m_protocol;
 }
 
 Protocol* Client::protocol() {
-    return &protocol_;
+    return &m_protocol;
 }
 
 const Binding* Client::binding() const {
-    return &binding_;
+    return &m_binding;
 }
 
 Binding* Client::binding() {
-    return &binding_;
+    return &m_binding;
 }
 
 

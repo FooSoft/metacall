@@ -43,33 +43,33 @@ public:
     ~Binding();
 
     template    <typename R>
-    bool        bind        (const Token& token, R(*function)());
+    bool        bind(const Token& token, R(*function)());
     template    <typename R, typename P1>
-    bool        bind        (const Token& token, R(*function)(P1));
+    bool        bind(const Token& token, R(*function)(P1));
     template    <typename R, typename P1, typename P2>
-    bool        bind        (const Token& token, R(*function)(P1, P2));
+    bool        bind(const Token& token, R(*function)(P1, P2));
     template    <typename R, typename P1, typename P2, typename P3>
-    bool        bind        (const Token& token, R(*function)(P1, P2, P3));
+    bool        bind(const Token& token, R(*function)(P1, P2, P3));
     template    <typename R, typename P1, typename P2, typename P3, typename P4>
-    bool        bind        (const Token& token, R(*function)(P1, P2, P3, P4));
+    bool        bind(const Token& token, R(*function)(P1, P2, P3, P4));
     template    <typename R, typename P1, typename P2, typename P3, typename P4, typename P5>
-    bool        bind        (const Token& token, R(*function)(P1, P2, P3, P4, P5));
+    bool        bind(const Token& token, R(*function)(P1, P2, P3, P4, P5));
     template    <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
-    bool        bind        (const Token& token, R(*function)(P1, P2, P3, P4, P5, P6));
+    bool        bind(const Token& token, R(*function)(P1, P2, P3, P4, P5, P6));
     template    <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
-    bool        bind        (const Token& token, R(*function)(P1, P2, P3, P4, P5, P6, P7));
+    bool        bind(const Token& token, R(*function)(P1, P2, P3, P4, P5, P6, P7));
     template    <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
-    bool        bind        (const Token& token, R(*function)(P1, P2, P3, P4, P5, P6, P7, P8));
+    bool        bind(const Token& token, R(*function)(P1, P2, P3, P4, P5, P6, P7, P8));
     template    <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9>
-    bool        bind        (const Token& token, R(*function)(P1, P2, P3, P4, P5, P6, P7, P8, P9));
+    bool        bind(const Token& token, R(*function)(P1, P2, P3, P4, P5, P6, P7, P8, P9));
 
-    CallResult  call        (const Token& token, Deserializer* args, Serializer* ret) const;
-    void        unbind      (const Token& token);
-    void        unbindAll   ();
+    CallResult  call(const Token& token, Deserializer* args, Serializer* ret) const;
+    void        unbind(const Token& token);
+    void        unbindAll();
 
 private:
     typedef     std::map<unsigned, IFunctor*> FunctorMap;
-    FunctorMap  functors_;
+    FunctorMap  m_functors;
 };
 
 
