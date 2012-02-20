@@ -110,12 +110,12 @@ Stream::State Stream::peek(PacketHeader* header, int* headerSize) {
     return STATE_READY;
 }
 
-const Socket* Stream::socket() const {
-    return m_socket;
+const Socket& Stream::socket() const {
+    return *m_socket;
 }
 
-Socket* Stream::socket() {
-    return m_socket;
+Socket& Stream::socket() {
+    return *m_socket;
 }
 
 

@@ -41,10 +41,10 @@ public:
     void            disconnect();
     bool            connected() const;
 
-    const Protocol* protocol() const;
-    Protocol*       protocol();
-    const Binding*  binding() const;
-    Binding*        binding();
+    const Protocol& protocol() const;
+    Protocol&       protocol();
+    const Binding&  binding() const;
+    Binding&        binding();
 
 private:
     Socket          m_socket;

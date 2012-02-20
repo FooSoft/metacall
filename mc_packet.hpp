@@ -127,7 +127,7 @@ struct PacketInvokeReply {
 
     enum {
         FLAG_UNBOUND_FUNC = 1 << 0,
-        FLAG_INVALID_ARGS = 1 << 1,
+        FLAG_INVALID_ARGS = 1 << 1
     };
 
     bool serialize(Serializer* serializer) const {

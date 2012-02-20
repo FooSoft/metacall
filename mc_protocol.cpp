@@ -40,7 +40,7 @@ Protocol::Protocol(Stream* stream, Binding* binding) :
 }
 
 void Protocol::advance() {
-    if (!m_stream->socket()->connected()) {
+    if (!m_stream->socket().connected()) {
         return;
     }
 

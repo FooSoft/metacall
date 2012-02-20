@@ -76,20 +76,20 @@ bool Client::connected() const {
     return m_socket.connected();
 }
 
-const Protocol* Client::protocol() const {
-    return &m_protocol;
+const Protocol& Client::protocol() const {
+    return m_protocol;
 }
 
-Protocol* Client::protocol() {
-    return &m_protocol;
+Protocol& Client::protocol() {
+    return m_protocol;
 }
 
-const Binding* Client::binding() const {
-    return &m_binding;
+const Binding& Client::binding() const {
+    return m_binding;
 }
 
-Binding* Client::binding() {
-    return &m_binding;
+Binding& Client::binding() {
+    return m_binding;
 }
 
 

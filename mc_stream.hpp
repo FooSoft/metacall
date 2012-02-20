@@ -53,8 +53,8 @@ class Stream {
     State           receive(T* packet);
     State           peek(PacketHeader* header, int* headerSize);
 
-    const Socket*   socket() const;
-    Socket*         socket();
+    const Socket&   socket() const;
+    Socket&         socket();
 
  private:
     Socket*         m_socket;

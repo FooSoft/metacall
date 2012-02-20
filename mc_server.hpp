@@ -63,8 +63,8 @@ public:
     bool            clients(ClientId id, ClientData* data) const;
     ClientId        clientActive() const;
     int             clientCount() const;
-    const Binding*  binding() const;
-    Binding*        binding();
+    const Binding&  binding() const;
+    Binding&        binding();
 
 private:
     struct ClientEntry : public ClientData {

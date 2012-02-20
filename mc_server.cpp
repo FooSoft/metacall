@@ -48,12 +48,12 @@ void Server::advance() {
     advanceConnected();
 }
 
-const Binding* Server::binding() const {
-    return &m_binding;
+const Binding& Server::binding() const {
+    return m_binding;
 }
 
-Binding* Server::binding() {
-    return &m_binding;
+Binding& Server::binding() {
+    return m_binding;
 }
 
 bool Server::start(int serverPort, int clientsMax) {
