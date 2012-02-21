@@ -122,7 +122,6 @@ int main(int, char *[]) {
         }
 #endif
 
-
         //
         // std::basic_string
         //
