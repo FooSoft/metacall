@@ -57,8 +57,8 @@ public:
     Serializer(Buffer* data);
 
     template    <typename T>
-    bool        write(const T& data);
-    bool        writeRaw(const void* data, int size);
+    void        write(const T& data);
+    void        writeRaw(const void* data, int size);
     bool        setOffset(int offset, bool relative);
     int         offset() const;
 
@@ -66,6 +66,17 @@ private:
     Buffer*     m_data;
     int         m_offset;
 };
+
+
+//
+// Handlers
+//
+
+template <typename T>
+void serialize(Serializer* serializer, const T& data);
+
+template <typename T>
+bool deserialize(Deserializer* deserializer, T* data);
 
 
 }

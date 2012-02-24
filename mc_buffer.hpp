@@ -48,7 +48,7 @@ public:
     void*               data();
     int                 bytes() const;
 
-    bool                serialize(Serializer* serializer) const;
+    void                serialize(Serializer* serializer) const;
     bool                deserialize(Deserializer* deserializer);
 
 private:

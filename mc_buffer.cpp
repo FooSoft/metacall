@@ -99,10 +99,9 @@ int Buffer::bytes() const {
     return m_data.size();
 }
 
-bool Buffer::serialize(Serializer* serializer) const {
+void Buffer::serialize(Serializer* serializer) const {
     serializer->write(bytes());
     serializer->writeRaw(data(), bytes());
-    return true;
 }
 
 bool Buffer::deserialize(Deserializer* deserializer) {

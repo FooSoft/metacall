@@ -32,37 +32,9 @@ namespace metacall {
 // Meta
 //
 
-qword serialize(Serializer*, ...);
-
 template <typename T>
-struct HasGlobalSerializer {
-    enum {
-        Value = sizeof(bool) == sizeof(
-            serialize(
-                static_cast<Serializer*>(NULL),
-                *static_cast<const T*>(NULL)
-            )
-        )
-    };
-};
-
-qword deserialize(Deserializer*, ...);
-
-template <typename T>
-struct HasGlobalDeserializer {
-    enum {
-        Value = sizeof(bool) == sizeof(
-            deserialize(
-                static_cast<Deserializer*>(NULL),
-                static_cast<T*>(NULL)
-            )
-        )
-    };
-};
-
-template <typename T>
-struct HasLocalSerializer {
-    template <typename U, bool (U::*)(Serializer*) const>
+struct HasSerializer {
+    template <typename U, void (U::*)(Serializer*) const>
     struct Signature { };
 
     template <typename U>
@@ -77,7 +49,7 @@ struct HasLocalSerializer {
 };
 
 template <typename T>
-struct HasLocalDeserializer {
+struct HasDeserializer {
     template <typename U, bool (U::*)(Deserializer*)>
     struct Signature { };
 

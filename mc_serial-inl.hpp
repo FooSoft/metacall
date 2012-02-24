@@ -30,7 +30,7 @@ namespace metacall {
 // TypeReader
 //
 
-template <typename T, bool L, bool G>
+template <typename T, bool S>
 struct TypeReader {
     static bool read(Deserializer* deserializer, T* data) {
         return data->deserialize(deserializer);
@@ -38,14 +38,7 @@ struct TypeReader {
 };
 
 template <typename T>
-struct TypeReader<T, false, true> {
-    static bool read(Deserializer* deserializer, T* data) {
-        return deserialize(deserializer, data);
-    }
-};
-
-template <typename T>
-struct TypeReader<T, false, false> {
+struct TypeReader<T, false> {
     static bool read(Deserializer* deserializer, T* data) {
         const T* const temp = reinterpret_cast<const T*>(
             deserializer->readRaw(sizeof(T))
@@ -61,11 +54,7 @@ struct TypeReader<T, false, false> {
 
 template <typename T>
 bool Deserializer::read(T* data) {
-    return TypeReader<
-        T,
-        HasLocalDeserializer<T>::Value,
-        HasGlobalDeserializer<T>::Value
-    >::read(this, data);
+    return deserialize(this, data);
 }
 
 
@@ -73,34 +62,38 @@ bool Deserializer::read(T* data) {
 // TypeWriter
 //
 
-template <typename T, bool L, bool G>
+template <typename T, bool S>
 struct TypeWriter {
-    static bool write(Serializer* serializer, const T& data) {
-        return data.serialize(serializer);
+    static void write(Serializer* serializer, const T& data) {
+        data.serialize(serializer);
     }
 };
 
 template <typename T>
-struct TypeWriter<T, false, true> {
-    static bool write(Serializer* serializer, const T& data) {
-        return serialize(serializer, data);
+struct TypeWriter<T, false> {
+    static void write(Serializer* serializer, const T& data) {
+        serializer->writeRaw(&data, sizeof(T));
     }
 };
 
 template <typename T>
-struct TypeWriter<T, false, false> {
-    static bool write(Serializer* serializer, const T& data) {
-        return serializer->writeRaw(&data, sizeof(T));
-    }
-};
+void Serializer::write(const T& data) {
+    serialize(this, data);
+}
+
+
+//
+// Handlers
+//
 
 template <typename T>
-bool Serializer::write(const T& data) {
-    return TypeWriter<
-        T,
-        HasLocalSerializer<T>::Value,
-        HasGlobalSerializer<T>::Value
-    >::write(this, data);
+void serialize(Serializer* serializer, const T& data) {
+    TypeWriter<T, HasSerializer<T>::Value>::write(serializer, data);
+}
+
+template <typename T>
+bool deserialize(Deserializer* deserializer, T* data) {
+    return TypeReader<T, HasDeserializer<T>::Value>::read(deserializer, data);
 }
 
 

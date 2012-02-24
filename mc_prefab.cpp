@@ -41,11 +41,10 @@ static int strLen(const wchar_t str[]) {
 }
 
 template <typename T>
-static bool serializeStr(Serializer* serializer, const T value[]) {
+static void serializeStr(Serializer* serializer, const T value[]) {
     const int length = value == NULL ? 0 : strLen(value) + 1;
     serializer->write(length);
     serializer->writeRaw(value, length * sizeof(T));
-    return true;
 }
 
 template <typename T>
@@ -70,16 +69,16 @@ static bool deserializeStr(Deserializer* deserializer, const T ** value) {
 // C strings
 //
 
-bool serialize(Serializer* serializer, const char value[]) {
-    return serializeStr(serializer, value);
+void serialize(Serializer* serializer, const char value[]) {
+    serializeStr(serializer, value);
 }
 
 bool deserialize(Deserializer* deserializer, const char ** value) {
     return deserializeStr(deserializer, value);
 }
 
-bool serialize(Serializer* serializer, const wchar_t value[]) {
-    return serializeStr(serializer, value);
+void serialize(Serializer* serializer, const wchar_t value[]) {
+    serializeStr(serializer, value);
 }
 
 bool deserialize(Deserializer* deserializer, const wchar_t ** value) {

@@ -75,13 +75,11 @@ Serializer::Serializer(Buffer* data) :
 {
 }
 
-bool Serializer::writeRaw(const void* data, int size) {
+void Serializer::writeRaw(const void* data, int size) {
     if (m_data != NULL) {
         m_data->addToBack(static_cast<const byte*>(data), size);
         m_offset += size;
     }
-
-    return true;
 }
 
 bool Serializer::setOffset(int offset, bool relative) {

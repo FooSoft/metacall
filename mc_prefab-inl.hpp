@@ -31,8 +31,8 @@ namespace metacall {
 //
 
 template <typename T, typename C, typename A>
-bool serialize(Serializer* serializer, const std::basic_string<T, C, A>& value) {
-    return serialize(serializer, value.c_str());
+void serialize(Serializer* serializer, const std::basic_string<T, C, A>& value) {
+    serialize(serializer, value.c_str());
 }
 
 template <typename T, typename C, typename A>
@@ -57,13 +57,12 @@ bool deserialize(Deserializer* deserializer, std::basic_string<T, C, A>* value) 
 //
 
 template <typename T, typename A>
-bool serialize(Serializer* serializer, const std::vector<T, A>& value) {
+void serialize(Serializer* serializer, const std::vector<T, A>& value) {
     serializer->write(value.size());
     for (const typename std::vector<T, A>::const_iterator iter = value.begin(); iter != value.end(); ++iter) {
         serializer->write(*iter);
     }
 
-    return true;
 }
 
 template <typename T, typename A>
@@ -93,13 +92,11 @@ bool deserialize(Deserializer* deserializer, std::vector<T, A>* value) {
 //
 
 template <typename T, typename A>
-bool serialize(Serializer* serializer, const std::list<T, A>& value) {
+void serialize(Serializer* serializer, const std::list<T, A>& value) {
     serializer->write(value.size());
     for (const typename std::list<T, A>::const_iterator iter = value.begin(); iter != value.end(); ++iter) {
         serializer->write(*iter);
     }
-
-    return true;
 }
 
 template <typename T, typename A>
@@ -129,7 +126,7 @@ bool deserialize(Deserializer* deserializer, std::list<T, A>* value) {
 //
 
 template <typename T1, typename T2>
-bool serialize(Serializer* serializer, const std::pair<T1, T2>& value) {
+void serialize(Serializer* serializer, const std::pair<T1, T2>& value) {
     serializer->write(value.first);
     serializer->write(value.second);
     return true;
@@ -146,13 +143,11 @@ bool deserialize(Deserializer* deserializer, std::pair<T1, T2>* value) {
 //
 
 template <typename K, typename V, typename C, typename A>
-bool serialize(Serializer* serializer, const std::map<K, V, C, A>& value) {
+void serialize(Serializer* serializer, const std::map<K, V, C, A>& value) {
     serializer->write(value.size());
     for (const typename std::map<K, V, C, A>::const_iterator iter = value.begin(); iter != value.end(); ++iter) {
         serializer->write(*iter);
     }
-
-    return true;
 }
 
 template <typename K, typename V, typename C, typename A>

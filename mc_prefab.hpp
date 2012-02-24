@@ -32,9 +32,9 @@ namespace metacall {
 // C string
 //
 
-bool serialize(Serializer* serializer, const char value[]);
+void serialize(Serializer* serializer, const char value[]);
 bool deserialize(Deserializer* deserializer, const char ** value);
-bool serialize(Serializer* serializer, const wchar_t value[]);
+void serialize(Serializer* serializer, const wchar_t value[]);
 bool deserialize(Deserializer* deserializer, const wchar_t ** value);
 
 
@@ -43,7 +43,7 @@ bool deserialize(Deserializer* deserializer, const wchar_t ** value);
 //
 
 template <typename T, typename C, typename A>
-bool serialize(Serializer* serializer, const std::basic_string<T, C, A>& value);
+void serialize(Serializer* serializer, const std::basic_string<T, C, A>& value);
 template <typename T, typename C, typename A>
 bool deserialize(Deserializer* deserializer, std::basic_string<T, C, A>* value);
 
@@ -53,7 +53,7 @@ bool deserialize(Deserializer* deserializer, std::basic_string<T, C, A>* value);
 //
 
 template <typename T, typename A>
-bool serialize(Serializer* serializer, const std::vector<T, A>& value);
+void serialize(Serializer* serializer, const std::vector<T, A>& value);
 template <typename T, typename A>
 bool deserialize(Deserializer* deserializer, std::vector<T, A>* value);
 
@@ -63,7 +63,7 @@ bool deserialize(Deserializer* deserializer, std::vector<T, A>* value);
 //
 
 template <typename T, typename A>
-bool serialize(Serializer* serializer, const std::list<T, A>& value);
+void serialize(Serializer* serializer, const std::list<T, A>& value);
 template <typename T, typename A>
 bool deserialize(Deserializer* deserializer, std::list<T, A>* value);
 
@@ -73,7 +73,7 @@ bool deserialize(Deserializer* deserializer, std::list<T, A>* value);
 //
 
 template <typename T1, typename T2>
-bool serialize(Serializer* serializer, const std::pair<T1, T2>& value);
+void serialize(Serializer* serializer, const std::pair<T1, T2>& value);
 template <typename T1, typename T2>
 bool deserialize(Deserializer* deserializer, std::pair<T1, T2>* value);
 
@@ -83,7 +83,7 @@ bool deserialize(Deserializer* deserializer, std::pair<T1, T2>* value);
 //
 
 template <typename K, typename V, typename C, typename A>
-bool serialize(Serializer* serializer, const std::map<K, V, C, A>& value);
+void serialize(Serializer* serializer, const std::map<K, V, C, A>& value);
 template <typename K, typename V, typename C, typename A>
 bool deserialize(Deserializer* deserializer, std::map<K, V, C, A>* value);
 

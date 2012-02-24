@@ -55,11 +55,10 @@ struct PacketHeader {
     {
     }
 
-    bool serialize(Serializer* serializer) const {
-        return
-            serializer->write(magic) &&
-            serializer->write(id) &&
-            serializer->write(size);
+    void serialize(Serializer* serializer) const {
+        serializer->write(magic);
+        serializer->write(id);
+        serializer->write(size);
     }
 
     bool deserialize(Deserializer* deserializer) {
@@ -90,11 +89,10 @@ struct PacketInvokeRequest {
         Id = PACKET_ID_FUNCTION_CALL_REQUEST
     };
 
-    bool serialize(Serializer* serializer) const {
-        return
-            serializer->write(function) &&
-            serializer->write(taskId) &&
-            serializer->write(data);
+    void serialize(Serializer* serializer) const {
+        serializer->write(function);
+        serializer->write(taskId);
+        serializer->write(data);
     }
 
     bool deserialize(Deserializer* deserializer) {
@@ -130,11 +128,10 @@ struct PacketInvokeReply {
         FLAG_INVALID_ARGS = 1 << 1
     };
 
-    bool serialize(Serializer* serializer) const {
-        return
-            serializer->write(flags) &&
-            serializer->write(taskId) &&
-            serializer->write(data);
+    void serialize(Serializer* serializer) const {
+        serializer->write(flags);
+        serializer->write(taskId);
+        serializer->write(data);
     }
 
     bool deserialize(Deserializer* deserializer) {
