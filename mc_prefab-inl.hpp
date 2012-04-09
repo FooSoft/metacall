@@ -59,7 +59,7 @@ bool deserialize(Deserializer* deserializer, std::basic_string<T, C, A>* value) 
 template <typename T, typename A>
 void serialize(Serializer* serializer, const std::vector<T, A>& value) {
     serializer->write(value.size());
-    for (const typename std::vector<T, A>::const_iterator iter = value.begin(); iter != value.end(); ++iter) {
+    for (typename std::vector<T, A>::const_iterator iter = value.begin(); iter != value.end(); ++iter) {
         serializer->write(*iter);
     }
 
@@ -69,12 +69,12 @@ template <typename T, typename A>
 bool deserialize(Deserializer* deserializer, std::vector<T, A>* value) {
     value->clear();
 
-    int length = 0;
+    size_t length = 0;
     if (!deserializer->read(&length)) {
         return false;
     }
 
-    for (int i = 0; i < length; ++i) {
+    for (size_t i = 0; i < length; ++i) {
         T item = T();
         if (!deserializer->read(&item)) {
             return false;
@@ -103,12 +103,12 @@ template <typename T, typename A>
 bool deserialize(Deserializer* deserializer, std::list<T, A>* value) {
     value->clear();
 
-    int length = 0;
+    size_t length = 0;
     if (!deserializer->read(&length)) {
         return false;
     }
 
-    for (int i = 0; i < length; ++i) {
+    for (size_t i = 0; i < length; ++i) {
         T item = T();
         if (!deserializer->read(&item)) {
             return false;
@@ -154,12 +154,12 @@ template <typename K, typename V, typename C, typename A>
 bool deserialize(Deserializer* deserializer, std::map<K, V, C, A>* value) {
     value->clear();
 
-    int length = 0;
+    size_t length = 0;
     if (!deserializer->read(&length)) {
         return false;
     }
 
-    for (unsigned i = 0; i < length; ++i) {
+    for (size_t i = 0; i < length; ++i) {
         std::pair<K, V> item;
         if (!deserializer->read(&item)) {
             return false;

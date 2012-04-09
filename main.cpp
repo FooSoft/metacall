@@ -35,6 +35,7 @@ using namespace metacall;
 
 #define TEST_C_STRING
 #define TEST_BASIC_STRING
+#define TEST_VECTOR
 
 
 //
@@ -43,26 +44,26 @@ using namespace metacall;
 
 #ifdef TEST_C_STRING
 
-static void testCStringAnsi(const char str[]) {
-    printf("[testCStringAnsi]: '%s'\n", str);
+static void testCStringAnsiImp(const char str[]) {
+    printf("[testCStringAnsiImp]: '%s'\n", str);
 }
 
-static void testCStringUnicode(const wchar_t str[]) {
-    printf("[testCStringUnicode]: '%S'\n", str);
+static void testCStringUnicodeImp(const wchar_t str[]) {
+    printf("[testCStringUnicodeImp]: '%S'\n", str);
 }
 
 static void testCString(Binding* binding, Protocol* protocol) {
-    binding->bind(FPARAM(testCStringAnsi));
-    binding->bind(FPARAM(testCStringUnicode));
+    binding->bind(FPARAM(testCStringAnsiImp));
+    binding->bind(FPARAM(testCStringUnicodeImp));
 
     const char* stringsAnsi[] = { "Hello world", "", NULL };
     for (int i = 0; i < 3; ++i) {
-        protocol->invoke("testCStringAnsi", stringsAnsi[i]);
+        protocol->invoke("testCStringAnsiImp", stringsAnsi[i]);
     }
 
     const wchar_t* stringsUnicode[] = { L"Hello world", L"", NULL };
     for (int i = 0; i < 3; ++i) {
-        protocol->invoke("testCStringUnicode", stringsUnicode[i]);
+        protocol->invoke("testCStringUnicodeImp", stringsUnicode[i]);
     }
 }
 
@@ -75,31 +76,60 @@ static void testCString(Binding* binding, Protocol* protocol) {
 
 #ifdef TEST_BASIC_STRING
 
-static void testBasicStringAnsi(const std::string& str) {
-    printf("[testBasicStringAnsi]: '%s'\n", str.c_str());
+static void testBasicStringAnsiImp(const std::string& str) {
+    printf("[testBasicStringAnsiImp]: '%s'\n", str.c_str());
 }
 
-static void testBasicStringUnicode(const std::wstring& str) {
-    wprintf(L"[testBasicStringUnicode]: '%S'\n", str.c_str());
+static void testBasicStringUnicodeImp(const std::wstring& str) {
+    wprintf(L"[testBasicStringUnicodeImp]: '%S'\n", str.c_str());
 }
 
 static void testBasicString(Binding* binding, Protocol* protocol) {
-    binding->bind(FPARAM(testBasicStringAnsi));
-    binding->bind(FPARAM(testBasicStringUnicode));
+    binding->bind(FPARAM(testBasicStringAnsiImp));
+    binding->bind(FPARAM(testBasicStringUnicodeImp));
 
     std::string stringsAnsi[] = { std::string("Hello world"), std::string() };
     for (int i = 0; i < 2; ++i) {
-        protocol->invoke("testBasicStringAnsi", stringsAnsi[i]);
+        protocol->invoke("testBasicStringAnsiImp", stringsAnsi[i]);
     }
 
     std::wstring stringsUnicode[] = { std::wstring(L"Hello world"), std::wstring() };
     for (int i = 0; i < 2; ++i) {
-        protocol->invoke("testBasicStringUnicode", stringsUnicode[i]);
+        protocol->invoke("testBasicStringUnicodeImp", stringsUnicode[i]);
     }
 }
 
 #endif
 
+
+//
+// std::vector
+//
+
+#ifdef TEST_VECTOR
+
+static void testVectorImp(const std::vector<float>& vec) {
+    printf("[testStdVector]: ");
+
+    for (std::vector<float>::const_iterator iter = vec.begin(); iter != vec.end(); ++iter) {
+        printf("%f ", *iter);
+    }
+
+    printf("\n");
+}
+
+static void testVector(Binding* binding, Protocol* protocol) {
+    binding->bind(FPARAM(testVectorImp));
+
+    std::vector<float> vec;
+    vec.push_back(3.14159f);
+    vec.push_back(2.71828f);
+    vec.push_back(1.61803f);
+
+    protocol->invoke("testVectorImp", vec);
+}
+
+#endif
 
 
 //
@@ -131,6 +161,10 @@ int main(int, char *[]) {
 
 #ifdef TEST_BASIC_STRING
         testBasicString(&binding, &protocol);
+#endif
+
+#ifdef TEST_VECTOR
+        testVector(&binding, &protocol);
 #endif
 
         server.advance();
