@@ -2,7 +2,7 @@ TEMPLATE = app
 CONFIG += console
 CONFIG -= qt
 
-SOURCES += main.cpp \
+SOURCES += \
     mc_token.cpp \
     mc_stream.cpp \
     mc_socket.cpp \
@@ -12,7 +12,8 @@ SOURCES += main.cpp \
     mc_client.cpp \
     mc_buffer.cpp \
     mc_binding.cpp \
-    mc_prefab.cpp
+    mc_prefab.cpp \
+    testing.cpp
 
 OTHER_FILES += \
     metacall.py \
