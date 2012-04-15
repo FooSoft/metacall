@@ -36,6 +36,7 @@ using namespace metacall;
 #define TEST_C_STRING
 #define TEST_BASIC_STRING
 #define TEST_VECTOR
+#define TEST_LIST
 
 
 //
@@ -109,7 +110,7 @@ static void testBasicString(Binding* binding, Protocol* protocol) {
 #ifdef TEST_VECTOR
 
 static void testVectorImp(const std::vector<float>& vec) {
-    printf("[testStdVector]: ");
+    printf("[testVectorImp]: ");
 
     for (std::vector<float>::const_iterator iter = vec.begin(); iter != vec.end(); ++iter) {
         printf("%f ", *iter);
@@ -130,6 +131,37 @@ static void testVector(Binding* binding, Protocol* protocol) {
 }
 
 #endif
+
+
+//
+// std::list
+//
+
+#ifdef TEST_LIST
+
+static void testListImp(const std::list<float>& lst) {
+    printf("[testListImp]: ");
+
+    for (std::list<float>::const_iterator iter = lst.begin(); iter != lst.end(); ++iter) {
+        printf("%f ", *iter);
+    }
+
+    printf("\n");
+}
+
+static void testList(Binding* binding, Protocol* protocol) {
+    binding->bind(FPARAM(testListImp));
+
+    std::list<float> lst;
+    lst.push_back(3.14159f);
+    lst.push_back(2.71828f);
+    lst.push_back(1.61803f);
+
+    protocol->invoke("testListImp", lst);
+}
+
+#endif
+
 
 
 //
@@ -165,6 +197,10 @@ int main(int, char *[]) {
 
 #ifdef TEST_VECTOR
         testVector(&binding, &protocol);
+#endif
+
+#ifdef TEST_LIST
+        testList(&binding, &protocol);
 #endif
 
         server.advance();

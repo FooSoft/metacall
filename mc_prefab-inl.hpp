@@ -94,7 +94,7 @@ bool deserialize(Deserializer* deserializer, std::vector<T, A>* value) {
 template <typename T, typename A>
 void serialize(Serializer* serializer, const std::list<T, A>& value) {
     serializer->write(value.size());
-    for (const typename std::list<T, A>::const_iterator iter = value.begin(); iter != value.end(); ++iter) {
+    for (typename std::list<T, A>::const_iterator iter = value.begin(); iter != value.end(); ++iter) {
         serializer->write(*iter);
     }
 }
