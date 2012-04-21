@@ -129,7 +129,6 @@ template <typename T1, typename T2>
 void serialize(Serializer* serializer, const std::pair<T1, T2>& value) {
     serializer->write(value.first);
     serializer->write(value.second);
-    return true;
 }
 
 template <typename T1, typename T2>
@@ -145,7 +144,7 @@ bool deserialize(Deserializer* deserializer, std::pair<T1, T2>* value) {
 template <typename K, typename V, typename C, typename A>
 void serialize(Serializer* serializer, const std::map<K, V, C, A>& value) {
     serializer->write(value.size());
-    for (const typename std::map<K, V, C, A>::const_iterator iter = value.begin(); iter != value.end(); ++iter) {
+    for (typename std::map<K, V, C, A>::const_iterator iter = value.begin(); iter != value.end(); ++iter) {
         serializer->write(*iter);
     }
 }

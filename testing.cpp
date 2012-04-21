@@ -37,6 +37,8 @@ using namespace metacall;
 #define TEST_BASIC_STRING
 #define TEST_VECTOR
 #define TEST_LIST
+#define TEST_PAIR
+#define TEST_MAP
 
 
 //
@@ -77,12 +79,12 @@ static void testCString(Binding* binding, Protocol* protocol) {
 
 #ifdef TEST_BASIC_STRING
 
-static void testBasicStringAnsiImp(const std::string& str) {
-    printf("[testBasicStringAnsiImp]: '%s'\n", str.c_str());
+static void testBasicStringAnsiImp(const std::string& string) {
+    printf("[testBasicStringAnsiImp]: '%s'\n", string.c_str());
 }
 
-static void testBasicStringUnicodeImp(const std::wstring& str) {
-    wprintf(L"[testBasicStringUnicodeImp]: '%S'\n", str.c_str());
+static void testBasicStringUnicodeImp(const std::wstring& string) {
+    wprintf(L"[testBasicStringUnicodeImp]: '%S'\n", string.c_str());
 }
 
 static void testBasicString(Binding* binding, Protocol* protocol) {
@@ -109,10 +111,10 @@ static void testBasicString(Binding* binding, Protocol* protocol) {
 
 #ifdef TEST_VECTOR
 
-static void testVectorImp(const std::vector<float>& vec) {
+static void testVectorImp(const std::vector<float>& vector) {
     printf("[testVectorImp]: ");
 
-    for (std::vector<float>::const_iterator iter = vec.begin(); iter != vec.end(); ++iter) {
+    for (std::vector<float>::const_iterator iter = vector.begin(); iter != vector.end(); ++iter) {
         printf("%f ", *iter);
     }
 
@@ -122,12 +124,12 @@ static void testVectorImp(const std::vector<float>& vec) {
 static void testVector(Binding* binding, Protocol* protocol) {
     binding->bind(FPARAM(testVectorImp));
 
-    std::vector<float> vec;
-    vec.push_back(3.14159f);
-    vec.push_back(2.71828f);
-    vec.push_back(1.61803f);
+    std::vector<float> vector;
+    vector.push_back(3.14159f);
+    vector.push_back(2.71828f);
+    vector.push_back(1.61803f);
 
-    protocol->invoke("testVectorImp", vec);
+    protocol->invoke("testVectorImp", vector);
 }
 
 #endif
@@ -139,10 +141,10 @@ static void testVector(Binding* binding, Protocol* protocol) {
 
 #ifdef TEST_LIST
 
-static void testListImp(const std::list<float>& lst) {
+static void testListImp(const std::list<float>& list) {
     printf("[testListImp]: ");
 
-    for (std::list<float>::const_iterator iter = lst.begin(); iter != lst.end(); ++iter) {
+    for (std::list<float>::const_iterator iter = list.begin(); iter != list.end(); ++iter) {
         printf("%f ", *iter);
     }
 
@@ -152,16 +154,63 @@ static void testListImp(const std::list<float>& lst) {
 static void testList(Binding* binding, Protocol* protocol) {
     binding->bind(FPARAM(testListImp));
 
-    std::list<float> lst;
-    lst.push_back(3.14159f);
-    lst.push_back(2.71828f);
-    lst.push_back(1.61803f);
+    std::list<float> list;
+    list.push_back(3.14159f);
+    list.push_back(2.71828f);
+    list.push_back(1.61803f);
 
-    protocol->invoke("testListImp", lst);
+    protocol->invoke("testListImp", list);
 }
 
 #endif
 
+
+//
+// std::pair
+//
+
+#ifdef TEST_PAIR
+
+static void testPairImp(const std::pair<float, int>& pair) {
+    printf("[testPairImp]: (%f, %d)\n", pair.first, pair.second);
+}
+
+static void testPair(Binding* binding, Protocol* protocol) {
+    binding->bind(FPARAM(testPairImp));
+    protocol->invoke("testPairImp", std::make_pair<float, int>(3.14159f, 123));
+}
+
+#endif
+
+
+//
+// std::map
+//
+
+#ifdef TEST_MAP
+
+static void testMapImp(const std::map<float, int>& map) {
+    printf("[testMapImp]: ");
+
+    for (std::map<float, int>::const_iterator iter = map.begin(); iter != map.end(); ++iter) {
+        printf("(%f, %d) ", iter->first, iter->second);
+    }
+
+    printf("\n");
+}
+
+static void testMap(Binding* binding, Protocol* protocol) {
+    binding->bind(FPARAM(testMapImp));
+
+    std::map<float, int> map;
+    map[3.14159f] = 123;
+    map[2.71828f] = 456;
+    map[1.61803f] = 789;
+
+    protocol->invoke("testMapImp", map);
+}
+
+#endif
 
 
 //
@@ -201,6 +250,14 @@ int main(int, char *[]) {
 
 #ifdef TEST_LIST
         testList(&binding, &protocol);
+#endif
+
+#ifdef TEST_PAIR
+        testPair(&binding, &protocol);
+#endif
+
+#ifdef TEST_MAP
+        testMap(&binding, &protocol);
 #endif
 
         server.advance();
