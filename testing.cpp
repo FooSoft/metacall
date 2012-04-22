@@ -84,7 +84,7 @@ static void testBasicStringAnsiImp(const std::string& string) {
 }
 
 static void testBasicStringUnicodeImp(const std::wstring& string) {
-    wprintf(L"[testBasicStringUnicodeImp]: '%S'\n", string.c_str());
+    printf("[testBasicStringUnicodeImp]: '%S'\n", string.c_str());
 }
 
 static void testBasicString(Binding* binding, Protocol* protocol) {
@@ -214,6 +214,15 @@ static void testMap(Binding* binding, Protocol* protocol) {
 
 
 //
+// Control
+//
+
+void testComplete(bool* complete) {
+    *complete = true;
+}
+
+
+//
 // Program entry
 //
 
@@ -234,36 +243,39 @@ int main(int, char *[]) {
 
     Binding&    binding     = server.binding();
     Protocol&   protocol    = client.protocol();
+    bool        complete    = false;
 
-    do {
 #ifdef TEST_C_STRING
-        testCString(&binding, &protocol);
+    testCString(&binding, &protocol);
 #endif
 
 #ifdef TEST_BASIC_STRING
-        testBasicString(&binding, &protocol);
+    testBasicString(&binding, &protocol);
 #endif
 
 #ifdef TEST_VECTOR
-        testVector(&binding, &protocol);
+    testVector(&binding, &protocol);
 #endif
 
 #ifdef TEST_LIST
-        testList(&binding, &protocol);
+    testList(&binding, &protocol);
 #endif
 
 #ifdef TEST_PAIR
-        testPair(&binding, &protocol);
+    testPair(&binding, &protocol);
 #endif
 
 #ifdef TEST_MAP
-        testMap(&binding, &protocol);
+    testMap(&binding, &protocol);
 #endif
 
+    binding.bind(FPARAM(testComplete));
+    protocol.invoke("testComplete", &complete);
+
+    while (!complete) {
         server.advance();
         client.advance();
     }
-    while (server.clientCount() > 0);
 
     return 0;
 }
