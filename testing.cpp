@@ -214,15 +214,6 @@ static void testMap(Binding* binding, Protocol* protocol) {
 
 
 //
-// Control
-//
-
-void testComplete(bool* complete) {
-    *complete = true;
-}
-
-
-//
 // Program entry
 //
 
@@ -243,7 +234,6 @@ int main(int, char *[]) {
 
     Binding&    binding     = server.binding();
     Protocol&   protocol    = client.protocol();
-    bool        complete    = false;
 
 #ifdef TEST_C_STRING
     testCString(&binding, &protocol);
@@ -269,10 +259,7 @@ int main(int, char *[]) {
     testMap(&binding, &protocol);
 #endif
 
-    binding.bind(FPARAM(testComplete));
-    protocol.invoke("testComplete", &complete);
-
-    while (!complete) {
+    while (protocol.pendingTasks()) {
         server.advance();
         client.advance();
     }
