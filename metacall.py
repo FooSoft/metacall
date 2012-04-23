@@ -156,3 +156,26 @@ class Token:
             hash = (hash << 5) + hash + ord(c)
 
         return hash
+
+
+#
+# Descriptor
+#
+
+class Descriptor:
+    def __init__(self, name, *types):
+        self.name = name
+        self.types = types
+
+
+#
+# callable
+#
+
+def callable(*types):
+    def wrapper(func):
+        assert func.func_code.co_argcount == len(types)
+        func.descriptor = Descriptor(func.func_code.co_name, types)
+        return func
+
+    return wrapper
