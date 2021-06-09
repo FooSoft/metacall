@@ -1,4 +1,4 @@
-# Metacall #
+# Metacall
 
 Many winters while ago I needed to find a simple cross-platform IPC library to use for one of my projects. After a good
 amount of searching, I was disappointed to discover that although there were lots of libraries for handling IPC, all
