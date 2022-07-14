@@ -1,12 +1,3 @@
-<!-- +++
-Area = "projects"
-GitHub = "metacall"
-Layout = "page"
-Tags = ["cpp", "metacall", "rpc", "mit license"]
-Description = "Cross platform C++ template-based IPC library."
-Collection = "ProjectsComplete"
-+++ -->
-
 # Metacall
 
 Many winters while ago I needed to find a simple cross-platform IPC library to use for one of my projects. After a good
